@@ -54,7 +54,7 @@ st.markdown("""
         position: fixed;
         top: 50%;
         left: 0;
-        width: 400px;
+        width: 265px;
         height: 50vh;
         background-color: #FFFFFF;
         z-index: 1;
@@ -64,12 +64,12 @@ st.markdown("""
     .efeito-lateral-baixo2 {
         position: fixed;
         top: 50%;
-        left: 149px;
-        width: 280px;
+        left: 147px;
+        width: 150px;
         height: 50vh;
         background-color: #6B8BB6;
         z-index: 1;
-        clip-path: ellipse(100% 100% at 0% 70%);
+        clip-path: ellipse(100% 90% at 0% 80%);
         transform: scaleX(-1);
     }
             
