@@ -7,8 +7,14 @@ st.markdown("""
         font-family: Arial;
     }      
     
+    .stTextInput div[data-baseweb="input"]{
+        border: none;        
+    }
+
     .stTextInput input{
         background-color: #D9D9D9;
+        border: 1px solid #000000;
+        border-radius: 7px;
         z-index: 2;
     }
             
@@ -35,7 +41,20 @@ st.markdown("""
             
     .stSelectbox div[data-baseweb="select"] > div{
         background-color: #D9D9D9;
+    }
+            
+    .stSelectbox div[data-baseweb="select"]{
         z-index: 2;
+    }
+            
+    .stSelectbox .st-cs{
+        color: #000000;
+        opacity: 0.5;
+    }
+
+    .stSelectbox svg{
+        color: #000000;
+        opacity: 0.5;
     }
 
     .efeito-lateral-cima {

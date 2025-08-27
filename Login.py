@@ -5,7 +5,11 @@ st.markdown("""
     .stApp {
         background-color: #6B8BB6;
         font-family: Arial;
-    }      
+    }
+
+    .stTextInput div[data-baseweb="input"]{
+        border: none;
+    }
     
     .stTextInput input {
         background-color: #D9D9D9;
@@ -23,7 +27,7 @@ st.markdown("""
         opacity: 0.5;
     }
             
-    .stButton button{
+    .stFormSubmitButton button{
         background-color: #446A8A;
         color: white;
         border: 1px solid #000000;
@@ -31,7 +35,7 @@ st.markdown("""
         font-size: 1.1em;
         width: 30%;
         margin-top: 10px;
-        margin-left: 240px;
+        margin-left: 218px;
     }
 
     .efeito-lateral-cima {
@@ -86,9 +90,9 @@ st.markdown("""
         border: 1px solid #000000;
         border-radius: 10px;
         padding: 130px;
-        width: 450px;
+        width: 430px;
         margin-top: -20px;
-        margin-left: -50px;
+        margin-left: -60px;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -102,15 +106,12 @@ st.markdown('<h1 class="titulo">S.I.S.E</h1>', unsafe_allow_html=True)
 col1, col2, col3 = st.columns([1, 2, 1])
 
 with col2:
-    st.markdown('<div class="caixa-login">', unsafe_allow_html=True)
-    
-    usuario = st.text_input("Nome de usuário:", label_visibility="collapsed", placeholder="Nome de usuário:")
-    senha = st.text_input("Senha:", label_visibility="collapsed", type="password", placeholder="Senha:")
+    with st.form(key="fazer-login"):
+        st.markdown('<div class="caixa-login">', unsafe_allow_html=True)
+        
+        usuario = st.text_input("Nome de usuário:", label_visibility="collapsed", placeholder="Nome de usuário:")
+        senha = st.text_input("Senha:", label_visibility="collapsed", type="password", placeholder="Senha:")
 
-    if st.button("Entrar", use_container_width=True):
-        if usuario == "admin" and senha == "12345":
-            st.success("Login bem-sucedido!")
-        else:
-            st.error("Nome de usuário ou senha incorretos.")
+        botao = st.form_submit_button("Entrar", use_container_width=True)
 
-    st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
