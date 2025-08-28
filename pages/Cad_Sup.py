@@ -5,9 +5,15 @@ st.markdown("""
     .stApp {
         background-color: #6B8BB6;
         font-family: Arial;
-    }      
+    }
+            
+    .stForm {
+        border: none;
+        margin-left: -20%;
+    }
     
     .stTextInput div[data-baseweb="input"]{
+        width: 70%;
         border: none;        
     }
 
@@ -28,14 +34,14 @@ st.markdown("""
         opacity: 0.5;
     }
             
-    .stButton button{
+    .stFormSubmitButton button{
         background-color: #446A8A;
         color: white;
         border-radius: 5px;
         font-size: 1.1em;
-        width: 35%;
-        margin-top: 100%;
-        margin-left: 80%;
+        width: 25%;
+        margin-top: 5%;
+        margin-left: 100%;
         letter-spacing: 0.15em;
     }
             
@@ -44,10 +50,11 @@ st.markdown("""
     }
             
     .stSelectbox div[data-baseweb="select"]{
+        width: 70%;
         z-index: 2;
     }
             
-    .stSelectbox .st-cs{
+    .stSelectbox div[data-baseweb="select"] > div > div > div{
         color: #000000;
         opacity: 0.5;
     }
@@ -110,23 +117,15 @@ st.markdown('<div class="efeito-lateral-baixo2"></div>', unsafe_allow_html=True)
 
 st.markdown('<h1 class="titulo">Cadastro Supervisor</h1>', unsafe_allow_html=True)
 
-col1, col2 = st.columns([1, 1])
-
-with col1:
-
-    st.markdown('<div class="caixa-cadastro">', unsafe_allow_html=True)
-
-    nome = st.text_input("Nome:", label_visibility="collapsed", placeholder="Nome:")
-    servico = st.selectbox("Serviço de atuação:", ("Bombeiro", "Polícia", "SAMU"), label_visibility="collapsed", index=None, placeholder="Serviço de atuação:")
-    regiao = st.selectbox("Região de atuação:", ("Salvador", "Simões Filho", "Santa Teresinha", "Rodelas"), label_visibility="collapsed", index=None, placeholder="Região de atuação:")
-    usuario = st.text_input("Nome de usuário:", label_visibility="collapsed", placeholder="Nome de usuário:")
-    senha = st.text_input("Senha:", label_visibility="collapsed", type="password", placeholder="Senha:")
-
-    st.markdown('</div>', unsafe_allow_html=True)
+col1, col2, col3 = st.columns([1, 4, 1])
 
 with col2:
-    if st.button("Cadastrar", use_container_width=True):
-        if nome == "Admin" and usuario == "admin" and senha == "12345":
-            st.success("Supervisor cadastrado com sucesso!")
-        else:
-            st.error("Informações preenchidas incorretamente, verifique-as!")
+    with st.form(key="cadastrar-supervisor"):
+
+        nome = st.text_input("Nome:", label_visibility="collapsed", placeholder="Nome:")
+        servico = st.selectbox("Serviço de atuação:", ("Bombeiro", "Polícia", "SAMU"), label_visibility="collapsed", index=None, placeholder="Serviço de atuação:")
+        regiao = st.selectbox("Região de atuação:", ("Salvador", "Simões Filho", "Santa Teresinha", "Rodelas"), label_visibility="collapsed", index=None, placeholder="Região de atuação:")
+        usuario = st.text_input("Nome de usuário:", label_visibility="collapsed", placeholder="Nome de usuário:")
+        senha = st.text_input("Senha:", label_visibility="collapsed", type="password", placeholder="Senha:")
+
+        st.form_submit_button("Cadastrar", use_container_width=True)
