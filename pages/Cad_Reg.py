@@ -123,7 +123,7 @@ with col2:
     with st.form(key="cadastrar-regional"):
         
         nome = st.text_input("Nome:", label_visibility="collapsed", placeholder="Nome:")
-        servico = st.selectbox("Estado", ("Bahia", "São Paulo", "Recife"), label_visibility="collapsed", index=None, placeholder="Estado:")
-        regiao = st.selectbox("Cidade", ("Salvador", "Simões Filho", "Santa Teresinha", "Rodelas"), label_visibility="collapsed", index=None, placeholder="Cidade:")
+        estado = st.selectbox("Estado", ("Bahia", "São Paulo", "Recife"), label_visibility="collapsed", index=None, placeholder="Estado:")
+        cidade = st.selectbox("Cidade", ("Salvador", "Simões Filho", "Santa Teresinha", "Rodelas"), label_visibility="collapsed", index=None, placeholder="Cidade:")
         
         botao = st.form_submit_button("Cadastrar", use_container_width=True)

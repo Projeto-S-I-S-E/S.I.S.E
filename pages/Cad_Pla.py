@@ -115,12 +115,12 @@ st.markdown('<div class="efeito-lateral-cima"></div>', unsafe_allow_html=True)
 st.markdown('<div class="efeito-lateral-baixo1"></div>', unsafe_allow_html=True)
 st.markdown('<div class="efeito-lateral-baixo2"></div>', unsafe_allow_html=True)
 
-st.markdown('<h1 class="titulo">Cadastro Supervisor</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="titulo">Cadastro Plantonista</h1>', unsafe_allow_html=True)
 
 col1, col2, col3 = st.columns([1, 4, 1])
 
 with col2:
-    with st.form(key="cadastrar-supervisor"):
+    with st.form(key="cadastrar-plantonista"):
 
         nome = st.text_input("Nome:", label_visibility="collapsed", placeholder="Nome:")
         servico = st.selectbox("Serviço de atuação:", ("Bombeiro", "Polícia", "SAMU"), label_visibility="collapsed", index=None, placeholder="Serviço de atuação:")
