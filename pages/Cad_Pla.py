@@ -1,4 +1,6 @@
 import streamlit as st
+import Controlllers.PlantonistaController as PlantonistaController
+import models.Plantonista as plantonista
 
 st.markdown("""
 <style>
@@ -123,9 +125,17 @@ with col2:
     with st.form(key="cadastrar-plantonista"):
 
         nome = st.text_input("Nome:", label_visibility="collapsed", placeholder="Nome:")
-        servico = st.selectbox("Serviço de atuação:", ("Bombeiro", "Polícia", "SAMU"), label_visibility="collapsed", index=None, placeholder="Serviço de atuação:")
         regiao = st.selectbox("Região de atuação:", ("Salvador", "Simões Filho", "Santa Teresinha", "Rodelas"), label_visibility="collapsed", index=None, placeholder="Região de atuação:")
         usuario = st.text_input("Nome de usuário:", label_visibility="collapsed", placeholder="Nome de usuário:")
         senha = st.text_input("Senha:", label_visibility="collapsed", type="password", placeholder="Senha:")
 
-        st.form_submit_button("Cadastrar", use_container_width=True)
+        botao = st.form_submit_button("Cadastrar", use_container_width=True)
+
+if botao:
+    plantonista.nome = nome
+    plantonista.regiao = regiao
+    plantonista.usuario = usuario
+    plantonista.senha = senha
+
+    PlantonistaController.Adicionar(plantonista)
+    st.sucess("Plantonista cadastrado com sucesso!")

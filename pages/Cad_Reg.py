@@ -1,4 +1,6 @@
 import streamlit as st
+import Controlllers.RegionalController as RegionalController
+import models.Regional as regional
 
 st.markdown("""
 <style>
@@ -127,3 +129,11 @@ with col2:
         cidade = st.selectbox("Cidade", ("Salvador", "Simões Filho", "Santa Teresinha", "Rodelas"), label_visibility="collapsed", index=None, placeholder="Cidade:")
         
         botao = st.form_submit_button("Cadastrar", use_container_width=True)
+
+if botao:
+    regional.nome = nome
+    regional.estado = estado
+    regional.cidade = cidade
+
+    RegionalController.Adicionar(regional)
+    st.success("Regional cadastrada com sucesso!")
