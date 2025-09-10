@@ -1,6 +1,7 @@
 import streamlit as st
 import Controlllers.CentralController as CentralController
 import models.Central as central
+import pandas as pd
 
 st.markdown("""
 <style>
@@ -20,6 +21,7 @@ st.markdown("""
     }
 
     .stTextInput input{
+        color: #000000;
         background-color: #D9D9D9;
         border: 1px solid #000000;
         border-radius: 7px;
@@ -132,10 +134,18 @@ with col2:
         botao = st.form_submit_button("Cadastrar", use_container_width=True)
 
 if botao:
-    central.nome = nome
-    central.servico = servico
-    central.usuario = usuario
-    central.senha = senha
 
-    CentralController.Adicionar(central)
+    CentralController.Adicionar(central.Central(0, nome, servico, usuario, senha))
     st.success("Central cadastrada com sucesso!")
+
+listaCentral = []
+
+for item in CentralController.SelecionarTodos():
+    listaCentral.append([item.nome, item.servico, item.usuario, item.senha])
+
+df = pd.DataFrame(
+    listaCentral,
+    columns=['Nome', 'Serviço', 'Usuário', 'Senha']
+)
+
+st.table(df)

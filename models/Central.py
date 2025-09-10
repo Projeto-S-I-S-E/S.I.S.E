@@ -1,5 +1,6 @@
 class Central:
-    def __init__(self, nome, servico, usuario, senha):
+    def __init__(self, id, nome, servico, usuario, senha):
+        self.id = id
         self.nome = nome
         self.servico = servico
         self.usuario = usuario
