@@ -33,6 +33,18 @@ st.markdown("""
         z-index: 1;
         clip-path: rect(0px 100% 100% 0px);
     }
+
+    .barra-lista{
+        position: fixed;
+        left: 0;
+        margin-left: 16%;
+        margin-top: 2%;
+        width: 79%;
+        height: 9%;
+        border: 1px solid #000000;
+        background-color: #D9D9D9;
+        clip-path: rect(0px 100% 100% 0px);
+    }
             
     .barra-perfil{
         position: fixed;
@@ -43,9 +55,20 @@ st.markdown("""
         height: 7%;
         border: 1px solid #000000;
         border-radius: 35px 35px 0px 0px;
-        background-color: #DBE8EC;
+        background-color: #D9D9D9;
         z-index: 1;
         clip-path: rect(0px 100% 100% 0px);
+    }
+
+    #nome-perfil{
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        margin-right: 38% !important;
+        margin-bottom: 0.5%;
+        color: #000000;
+        font-size: 1.3em !important;
+        z-index: 2;
     }
             
     .botao{
@@ -82,7 +105,7 @@ st.markdown("""
         top: 0;
         left: 0;
         margin-top: 7% !important;
-        margin-left: 15% !important;
+        margin-left: 16% !important;
         color: #FFFFFF;
         font-size: 4em !important;
     }
@@ -96,4 +119,9 @@ st.markdown('<button id="botaoSair" class="botao">Sair</button>', unsafe_allow_h
 st.markdown('<h1 class="titulo">Central:</h1>', unsafe_allow_html=True)
 st.markdown('<button id="botaoNovoUsuario" class="botao">Novo usuário</button>', unsafe_allow_html=True)
 
-st.markdown('<div class="barra-perfil"></div>', unsafe_allow_html=True)
+st.markdown('<div class="barra-lista"></div>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
+
+st.markdown('<div class="barra-perfil">', unsafe_allow_html=True)
+st.markdown('<p id="nome-perfil">Perfil Administrador</p>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
