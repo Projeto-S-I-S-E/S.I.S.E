@@ -1,6 +1,7 @@
 import streamlit as st
-import Controlllers.RegionalController as RegionalController
-import models.Regional as regional
+import Controllers.CentralController as CentralController
+import models.Central as central
+import pandas as pd
 
 st.markdown("""
 <style>
@@ -20,6 +21,7 @@ st.markdown("""
     }
 
     .stTextInput input{
+        color: #000000;
         background-color: #D9D9D9;
         border: 1px solid #000000;
         border-radius: 7px;
@@ -117,23 +119,21 @@ st.markdown('<div class="efeito-lateral-cima"></div>', unsafe_allow_html=True)
 st.markdown('<div class="efeito-lateral-baixo1"></div>', unsafe_allow_html=True)
 st.markdown('<div class="efeito-lateral-baixo2"></div>', unsafe_allow_html=True)
 
-st.markdown('<h1 class="titulo">Cadastro Regional</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="titulo">Cadastro Central</h1>', unsafe_allow_html=True)
 
 col1, col2, col3 = st.columns([1, 4, 1])
 
 with col2:
-    with st.form(key="cadastrar-regional"):
-        
+    with st.form(key="cadastrar-central"):
+
         nome = st.text_input("Nome:", label_visibility="collapsed", placeholder="Nome:")
-        estado = st.selectbox("Estado", ("Bahia", "São Paulo", "Recife"), label_visibility="collapsed", index=None, placeholder="Estado:")
-        cidade = st.selectbox("Cidade", ("Salvador", "Simões Filho", "Santa Teresinha", "Rodelas"), label_visibility="collapsed", index=None, placeholder="Cidade:")
-        
+        servico = st.selectbox("Serviço de atuação:", (1, 2, 3), label_visibility="collapsed", index=None, placeholder="Serviço de atuação:")
+        usuario = st.text_input("Nome de usuário:", label_visibility="collapsed", placeholder="Nome de usuário:")
+        senha = st.text_input("Senha:", label_visibility="collapsed", type="password", placeholder="Senha:")
+
         botao = st.form_submit_button("Cadastrar", use_container_width=True)
 
 if botao:
-    regional.nome = nome
-    regional.estado = estado
-    regional.cidade = cidade
 
-    RegionalController.Adicionar(regional)
-    st.success("Regional cadastrada com sucesso!")
+    CentralController.Adicionar(central.Central(0, nome, servico, usuario, senha))
+    st.success("Central cadastrada com sucesso!")

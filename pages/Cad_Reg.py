@@ -1,6 +1,6 @@
 import streamlit as st
-import Controlllers.PlantonistaController as PlantonistaController
-import models.Plantonista as plantonista
+import Controllers.RegionalController as RegionalController
+import models.Regional as regional
 
 st.markdown("""
 <style>
@@ -117,25 +117,23 @@ st.markdown('<div class="efeito-lateral-cima"></div>', unsafe_allow_html=True)
 st.markdown('<div class="efeito-lateral-baixo1"></div>', unsafe_allow_html=True)
 st.markdown('<div class="efeito-lateral-baixo2"></div>', unsafe_allow_html=True)
 
-st.markdown('<h1 class="titulo">Cadastro Plantonista</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="titulo">Cadastro Regional</h1>', unsafe_allow_html=True)
 
 col1, col2, col3 = st.columns([1, 4, 1])
 
 with col2:
-    with st.form(key="cadastrar-plantonista"):
-
+    with st.form(key="cadastrar-regional"):
+        
         nome = st.text_input("Nome:", label_visibility="collapsed", placeholder="Nome:")
-        regiao = st.selectbox("Região de atuação:", ("Salvador", "Simões Filho", "Santa Teresinha", "Rodelas"), label_visibility="collapsed", index=None, placeholder="Região de atuação:")
-        usuario = st.text_input("Nome de usuário:", label_visibility="collapsed", placeholder="Nome de usuário:")
-        senha = st.text_input("Senha:", label_visibility="collapsed", type="password", placeholder="Senha:")
-
+        estado = st.selectbox("Estado", ("Bahia", "São Paulo", "Recife"), label_visibility="collapsed", index=None, placeholder="Estado:")
+        cidade = st.selectbox("Cidade", ("Salvador", "Simões Filho", "Santa Teresinha", "Rodelas"), label_visibility="collapsed", index=None, placeholder="Cidade:")
+        
         botao = st.form_submit_button("Cadastrar", use_container_width=True)
 
 if botao:
-    plantonista.nome = nome
-    plantonista.regiao = regiao
-    plantonista.usuario = usuario
-    plantonista.senha = senha
+    regional.nome = nome
+    regional.estado = estado
+    regional.cidade = cidade
 
-    PlantonistaController.Adicionar(plantonista)
-    st.sucess("Plantonista cadastrado com sucesso!")
+    RegionalController.Adicionar(regional)
+    st.success("Regional cadastrada com sucesso!")

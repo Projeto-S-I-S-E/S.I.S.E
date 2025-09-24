@@ -8,11 +8,11 @@ def Adicionar(central):
     central.servico, central.usuario, central.senha, central.nome).rowcount
     db.cnxn.commit()
 
-def SelecionarTodos():
-    db.cursor.execute("SELECT * FROM Central")
+def SelecionarNome():
+    db.cursor.execute("SELECT idCentral, nome FROM Central")
     listaCentral = []
 
     for row in db.cursor.fetchall():
-        listaCentral.append(central.Central(row[0], row[4], row[1], row[2], row[3]))
+        listaCentral.append(central.Central(row[0], row[1], None, None, None))
 
     return listaCentral

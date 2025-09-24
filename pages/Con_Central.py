@@ -1,4 +1,5 @@
 import streamlit as st
+import Controllers.CentralController as CentralController
 
 st.markdown("""
 <style>
@@ -34,16 +35,40 @@ st.markdown("""
         clip-path: rect(0px 100% 100% 0px);
     }
 
-    .barra-lista{
-        position: fixed;
-        left: 0;
-        margin-left: 16%;
-        margin-top: 2%;
-        width: 79%;
-        height: 9%;
+    .barra-lista-item{
+        width: 120%;
+        height: 80px;
         border: 1px solid #000000;
+        border-radius: 5px;
         background-color: #D9D9D9;
-        clip-path: rect(0px 100% 100% 0px);
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        margin-bottom: 15px;
+    }
+
+    .lista-titulo {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #000000;
+        flex-grow: 1;
+    }
+
+    .lista-botoes {
+        display: flex;
+        gap: 10px;
+    }
+
+    .botao-lista {
+        background-color: #7B1A1E;
+        border: 1px solid #440C0E;
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+        border-radius: 5px;
+        color: white;
+        display: inline-block;
+        padding: 0;
     }
             
     .barra-perfil{
@@ -119,7 +144,28 @@ st.markdown('<button id="botaoSair" class="botao">Sair</button>', unsafe_allow_h
 st.markdown('<h1 class="titulo">Central:</h1>', unsafe_allow_html=True)
 st.markdown('<button id="botaoNovoUsuario" class="botao">Novo usuário</button>', unsafe_allow_html=True)
 
-st.markdown('<div class="barra-lista"></div>', unsafe_allow_html=True)
+lista_de_centrais = CentralController.SelecionarNome()
+
+st.markdown("""
+<div style="
+    padding-top: 15%; 
+    margin-left: 16%;
+    padding-right: 5%;
+    height: calc(100hv - 200px);
+    overflow-y: auto;">
+""", unsafe_allow_html=True)
+
+for central in lista_de_centrais:
+    st.markdown(f"""
+        <div class="barra-lista-item">
+            <span class="lista-titulo">{central.nome}</span>
+            <div class="lista-botoes">
+                <button class="botao-lista" style="background-color: #446A8A;"></button>
+                <button class="botao-lista" style="background-color: #7B1A1E;"></button>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
 st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown('<div class="barra-perfil">', unsafe_allow_html=True)
