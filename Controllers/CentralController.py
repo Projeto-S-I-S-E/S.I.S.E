@@ -3,9 +3,9 @@ import models.Central as central
 
 def Adicionar(central):
     count = db.cursor.execute("""
-    INSERT INTO Central(idServico, usuario, senha, nome)
-    VALUES (?,?,?,?)""",
-    central.servico, central.usuario, central.senha, central.nome).rowcount
+    INSERT INTO Central(usuario, senha, nome)
+    VALUES (?,?,?)""",
+    central.usuario, central.senha, central.nome).rowcount
     db.cnxn.commit()
 
 def SelecionarNome():
@@ -13,6 +13,6 @@ def SelecionarNome():
     listaCentral = []
 
     for row in db.cursor.fetchall():
-        listaCentral.append(central.Central(row[0], row[1], None, None, None))
+        listaCentral.append(central.Central(row[0], row[1], None, None))
 
     return listaCentral

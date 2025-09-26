@@ -1,7 +1,6 @@
 import streamlit as st
 import Controllers.CentralController as CentralController
 import models.Central as central
-import pandas as pd
 
 st.markdown("""
 <style>
@@ -127,7 +126,6 @@ with col2:
     with st.form(key="cadastrar-central"):
 
         nome = st.text_input("Nome:", label_visibility="collapsed", placeholder="Nome:")
-        servico = st.selectbox("Serviço de atuação:", (1, 2, 3), label_visibility="collapsed", index=None, placeholder="Serviço de atuação:")
         usuario = st.text_input("Nome de usuário:", label_visibility="collapsed", placeholder="Nome de usuário:")
         senha = st.text_input("Senha:", label_visibility="collapsed", type="password", placeholder="Senha:")
 
@@ -135,5 +133,5 @@ with col2:
 
 if botao:
 
-    CentralController.Adicionar(central.Central(0, nome, servico, usuario, senha))
+    CentralController.Adicionar(central.Central(0, nome, usuario, senha))
     st.success("Central cadastrada com sucesso!")
