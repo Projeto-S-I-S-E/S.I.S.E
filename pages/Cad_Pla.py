@@ -4,6 +4,10 @@ import models.Plantonista as plantonista
 
 st.markdown("""
 <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+
     .stApp {
         background-color: #6B8BB6;
         font-family: Arial;
@@ -121,19 +125,27 @@ st.markdown('<h1 class="titulo">Cadastro Plantonista</h1>', unsafe_allow_html=Tr
 
 col1, col2, col3 = st.columns([1, 4, 1])
 
+regionais_data = PlantonistaController.SelecionarRegionalIdNome()
+
+regionais_nome = [nome for idRegional, nome in regionais_data]
+regionais_id = {nome: idRegional for idRegional, nome in regionais_data}
+
 with col2:
     with st.form(key="cadastrar-plantonista"):
 
-        nome = st.text_input("Nome:", label_visibility="collapsed", placeholder="Nome:")
-        regiao = st.selectbox("Região de atuação:", ("Salvador", "Simões Filho", "Santa Teresinha", "Rodelas"), label_visibility="collapsed", index=None, placeholder="Região de atuação:")
+        nome_plantonista = st.text_input("Nome:", label_visibility="collapsed", placeholder="Nome:")
+        nome_regiao = st.selectbox("Região de atuação:", regionais_nome, label_visibility="collapsed", index=None, placeholder="Região de atuação:")
         usuario = st.text_input("Nome de usuário:", label_visibility="collapsed", placeholder="Nome de usuário:")
         senha = st.text_input("Senha:", label_visibility="collapsed", type="password", placeholder="Senha:")
 
         botao = st.form_submit_button("Cadastrar", use_container_width=True)
 
+if nome_regiao:
+    id_regiao = regionais_id[nome_regiao]
+
 if botao:
-    plantonista.nome = nome
-    plantonista.regiao = regiao
+    plantonista.nome = nome_plantonista
+    plantonista.regiao = id_regiao
     plantonista.usuario = usuario
     plantonista.senha = senha
 

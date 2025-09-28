@@ -4,6 +4,10 @@ import models.Regional as regional
 
 st.markdown("""
 <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+
     .stApp {
         background-color: #6B8BB6;
         font-family: Arial;
@@ -121,18 +125,35 @@ st.markdown('<h1 class="titulo">Cadastro Regional</h1>', unsafe_allow_html=True)
 
 col1, col2, col3 = st.columns([1, 4, 1])
 
+centrais_data = RegionalController.SelecionarCentralIdNome()
+servicos_data = RegionalController.SelecionarServicoIdNome()
+
+centrais_nomes = [nome for idCentral, nome in centrais_data]
+servicos_nomes = [nome for idServico, nome in servicos_data]
+centrais_id = {nome: idCentral for idCentral, nome in centrais_data}
+servicos_id = {nome: idServico for idServico, nome in servicos_data}
+
+
 with col2:
     with st.form(key="cadastrar-regional"):
         
-        nome = st.text_input("Nome:", label_visibility="collapsed", placeholder="Nome:")
-        estado = st.selectbox("Estado", ("Bahia", "São Paulo", "Recife"), label_visibility="collapsed", index=None, placeholder="Estado:")
-        cidade = st.selectbox("Cidade", ("Salvador", "Simões Filho", "Santa Teresinha", "Rodelas"), label_visibility="collapsed", index=None, placeholder="Cidade:")
+        nome_regional = st.text_input("Nome:", label_visibility="collapsed", placeholder="Nome:")
+        nome_central = st.selectbox("Central", centrais_nomes, label_visibility="collapsed", index=None, placeholder="Central:")
+        nome_servico = st.selectbox("Serviço", servicos_nomes, label_visibility="collapsed", index=None, placeholder="Serviço:")
+        cidade = st.text_input("Cidade:", label_visibility="collapsed", placeholder="Cidade:")
         
         botao = st.form_submit_button("Cadastrar", use_container_width=True)
 
+if nome_central:
+    id_central = centrais_id[nome_central]
+
+if nome_servico:
+    id_servico = servicos_id[nome_servico]
+
 if botao:
-    regional.nome = nome
-    regional.estado = estado
+    regional.nome = nome_regional
+    regional.central = id_central
+    regional.servico = id_servico
     regional.cidade = cidade
 
     RegionalController.Adicionar(regional)

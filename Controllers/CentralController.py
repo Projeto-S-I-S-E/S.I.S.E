@@ -2,7 +2,7 @@ import services.database as db
 import models.Central as central
 
 def Adicionar(central):
-    count = db.cursor.execute("""
+    db.cursor.execute("""
     INSERT INTO Central(usuario, senha, nome)
     VALUES (?,?,?)""",
     central.usuario, central.senha, central.nome).rowcount

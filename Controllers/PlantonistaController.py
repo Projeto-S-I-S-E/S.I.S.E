@@ -6,3 +6,8 @@ def Adicionar(plantonista):
     VALUES (?,?,?,?)""",
     plantonista.regiao, plantonista.usuario, plantonista.senha, plantonista.nome).rowcount
     db.cnxn.commit()
+
+def SelecionarRegionalIdNome():
+    db.cursor.execute("SELECT idRegional, nome FROM Regional")
+
+    return db.cursor.fetchall()

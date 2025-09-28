@@ -1,5 +1,6 @@
 class Regional:
-    def __init__(self, nome, estado, cidade):
+    def __init__(self, nome, central, servico, cidade):
         self.nome = nome
-        self.estado = estado
+        self.central = central
+        self.servico = servico
         self.cidade = cidade

@@ -4,6 +4,10 @@ import models.Central as central
 
 st.markdown("""
 <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+
     .stApp {
         background-color: #6B8BB6;
         font-family: Arial;
