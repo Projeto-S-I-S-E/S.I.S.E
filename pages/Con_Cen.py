@@ -116,7 +116,7 @@ st.markdown("""
         height: 40px;
     }
             
-    #botaoNovoUsuario{
+    #botaoNovaCentral{
         position: fixed;
         top: 0;
         right: 0;
@@ -142,7 +142,7 @@ st.markdown('<div class="barra-superior"></div>', unsafe_allow_html=True)
 st.markdown('<button id="botaoSair" class="botao">Sair</button>', unsafe_allow_html=True)
 
 st.markdown('<h1 class="titulo">Central:</h1>', unsafe_allow_html=True)
-st.markdown('<button id="botaoNovoUsuario" class="botao">Novo usuário</button>', unsafe_allow_html=True)
+st.markdown('<button id="botaoNovaCentral" class="botao">Nova central</button>', unsafe_allow_html=True)
 
 lista_de_centrais = CentralController.SelecionarNome()
 

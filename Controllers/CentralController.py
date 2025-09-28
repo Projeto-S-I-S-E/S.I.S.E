@@ -1,5 +1,4 @@
 import services.database as db
-import models.Central as central
 
 def Adicionar(central):
     db.cursor.execute("""
@@ -10,9 +9,5 @@ def Adicionar(central):
 
 def SelecionarNome():
     db.cursor.execute("SELECT idCentral, nome FROM Central")
-    listaCentral = []
 
-    for row in db.cursor.fetchall():
-        listaCentral.append(central.Central(row[0], row[1], None, None))
-
-    return listaCentral
+    return db.cursor.fetchall()
