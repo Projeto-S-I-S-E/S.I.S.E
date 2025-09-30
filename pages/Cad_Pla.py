@@ -150,4 +150,4 @@ if botao:
     plantonista.senha = senha
 
     PlantonistaController.Adicionar(plantonista)
-    st.sucess("Plantonista cadastrado com sucesso!")
+    st.success("Plantonista cadastrado com sucesso!")
