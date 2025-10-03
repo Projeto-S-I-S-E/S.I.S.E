@@ -160,8 +160,8 @@ for plantonista in lista_de_plantonistas:
         <div class="barra-lista-item">
             <span class="lista-titulo">{plantonista.nome}</span>
             <div class="lista-botoes">
-                <button class="botao-lista" style="background-color: #446A8A;"></button>
-                <button class="botao-lista" style="background-color: #7B1A1E;"></button>
+                <button class="botao-lista" style="background-color: #446A8A; color: white; font-size: 1.2em; line-height: 1;">&#x270e</button>
+                <button class="botao-lista" style="background-color: #7B1A1E; color: white; font-size: 1.2em; line-height: 1;">&#x2716;</button>
             </div>
         </div>
     """, unsafe_allow_html=True)
