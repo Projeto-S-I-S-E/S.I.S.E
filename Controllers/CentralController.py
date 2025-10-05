@@ -5,7 +5,7 @@ def Adicionar(central):
     INSERT INTO Central(usuario, senha, nome)
     VALUES (?,?,?)""",
     central.usuario, central.senha, central.nome).rowcount
-    db.cnxn.commit()
+    db.cnxn.commit() 
 
 def SelecionarNome():
     db.cursor.execute("SELECT idCentral, nome FROM Central")

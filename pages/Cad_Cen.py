@@ -46,7 +46,7 @@ st.markdown("""
         color: white;
         border-radius: 5px;
         font-size: 1.1em;
-        width: 25%;
+        width: 27%;
         margin-top: 5%;
         margin-left: 100%;
         letter-spacing: 0.15em;

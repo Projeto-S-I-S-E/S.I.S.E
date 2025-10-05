@@ -1,6 +1,6 @@
 class Plantonista:
-    def __init__(self, nome, regiao, usuario, senha):
+    def __init__(self, id, regional, nome, status):
+        self.id = id
+        self.regional = regional
         self.nome = nome
-        self.regiao = regiao
-        self.usuario = usuario
-        self.senha = senha
+        self.status = status
