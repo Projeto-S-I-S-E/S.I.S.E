@@ -1,6 +1,6 @@
 import pyodbc
 
-server = 'DESKTOP-VRKSVPI'
+server = 'DESKTOP-A3IBJIT'
 database = 'ProjetoSISE'
 username = 'sa'
 password = 'ProjetoSISE'

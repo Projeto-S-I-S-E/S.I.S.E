@@ -136,6 +136,9 @@ with col2:
         botao = st.form_submit_button("Cadastrar", use_container_width=True)
 
 if botao:
+    central.nome = nome
+    central.usuario = usuario
+    central.senha = senha
 
-    CentralController.Adicionar(central.Central(0, nome, usuario, senha))
+    CentralController.Adicionar(central)
     st.success("Central cadastrada com sucesso!")

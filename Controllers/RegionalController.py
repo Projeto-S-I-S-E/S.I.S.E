@@ -2,8 +2,8 @@ import services.database as db
 
 def Adicionar(regional):
     db.cursor.execute("""
-    INSERT INTO Regional(idCentral, idServico, cidade, nome)
-    VALUES (?,?,?,?)""",
+    INSERT INTO Regional(idCentral, idServico, cidade, nome, status)
+    VALUES (?,?,?,?,1)""",
     regional.central, regional.servico, regional.cidade, regional.nome).rowcount
     db.cnxn.commit()
 
