@@ -1,4 +1,6 @@
 import streamlit as st
+import Controllers.LoginController as LoginController
+import time
 
 st.markdown("""
 <style>
@@ -100,6 +102,23 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
+
+if 'logado' not in st.session_state:
+    st.session_state['logado'] = False
+if 'usuario_cargo_id' not in st.session_state:
+    st.session_state['usuario_cargo_id'] = None
+
+def entrar(cargo_id):
+    st.session_state['logado'] = True
+    st.session_state['usuario_cargo_id'] = cargo_id
+    st.success("Login efetuado com sucesso!")
+    time.sleep(1)
+    st.rerun()
+
+def sair():
+    st.session_state['logado'] = False
+    st.session_state['usuario_cargo_id'] = None
+    st.rerun()
 
 st.markdown('<div class="efeito-lateral-cima"></div>', unsafe_allow_html=True)
 st.markdown('<div class="efeito-lateral-baixo1"></div>', unsafe_allow_html=True)
