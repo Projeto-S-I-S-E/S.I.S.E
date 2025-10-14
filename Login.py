@@ -1,6 +1,8 @@
 import streamlit as st
 import Controllers.LoginController as LoginController
+import pages.ConCentralView as ConCentralView
 import time
+from pages.Dashboard import dashboard_por_cargo
 
 st.markdown("""
 <style>
@@ -18,6 +20,7 @@ st.markdown("""
     }
     
     .stTextInput input {
+        color: #000000;
         background-color: #D9D9D9;
         border: 1px solid #000000;
         border-radius: 7px;
@@ -107,10 +110,23 @@ if 'logado' not in st.session_state:
     st.session_state['logado'] = False
 if 'usuario_cargo_id' not in st.session_state:
     st.session_state['usuario_cargo_id'] = None
+if 'usuario_nome' not in st.session_state:
+    st.session_state['usuario_nome'] = None
+if 'pagina_atual' not in st.session_state:
+    st.session_state['pagina_atual'] = None
 
-def entrar(cargo_id):
+DASHBOARDS = {
+    1: "ADMIN_DASHBOARD",
+    2: "CENTRAL_DASHBOARD",
+    3: "PLANTONISTA_DASHBOARD",
+    4: "USUARIO_TELA"
+}
+
+def entrar(cargo_id, nome_usuario):
     st.session_state['logado'] = True
     st.session_state['usuario_cargo_id'] = cargo_id
+    st.session_state['usuario_nome'] = nome_usuario
+    st.session_state['pagina_atual'] = DASHBOARDS.get(cargo_id)
     st.success("Login efetuado com sucesso!")
     time.sleep(1)
     st.rerun()
@@ -118,23 +134,51 @@ def entrar(cargo_id):
 def sair():
     st.session_state['logado'] = False
     st.session_state['usuario_cargo_id'] = None
+    st.session_state['usuario_nome'] = None
+    st.session_state['pagina_atual'] = None
     st.rerun()
 
-st.markdown('<div class="efeito-lateral-cima"></div>', unsafe_allow_html=True)
-st.markdown('<div class="efeito-lateral-baixo1"></div>', unsafe_allow_html=True)
-st.markdown('<div class="efeito-lateral-baixo2"></div>', unsafe_allow_html=True)
+if st.session_state['logado']:
 
-st.markdown('<h1 class="titulo">S.I.S.E</h1>', unsafe_allow_html=True)
+    cargo_id = st.session_state['usuario_cargo_id']
+    nome_usuario = st.session_state['usuario_nome']
 
-col1, col2, col3 = st.columns([1, 2, 1])
+    if st.session_state['pagina_atual'] in ["ADMIN_DASHBOARD", "CENTRAL_DASHBOARD", "PLANTONISTA_DASHBOARD"]:
+        dashboard_por_cargo(cargo_id, nome_usuario)
+    elif st.session_state['pagina_atual'] == "CENTRAL_LISTA":
+        ConCentralView.renderizar_pagina()
+    elif st.session_state['pagina_atual'] == "REGIONAL_LISTA":
+        st.title("Lista de Regionais")
+    elif st.session_state['pagina_atual'] == "PLANTONISTA_LISTA":
+        st.title("Lista de Plantonistas")
 
-with col2:
-    with st.form(key="fazer-login"):
-        st.markdown('<div class="caixa-login">', unsafe_allow_html=True)
-        
-        usuario = st.text_input("Nome de usuário:", label_visibility="collapsed", placeholder="Nome de usuário:")
-        senha = st.text_input("Senha:", label_visibility="collapsed", type="password", placeholder="Senha:")
+else:
 
-        botao = st.form_submit_button("Entrar", use_container_width=True)
+    st.markdown('<div class="efeito-lateral-cima"></div>', unsafe_allow_html=True)
+    st.markdown('<div class="efeito-lateral-baixo1"></div>', unsafe_allow_html=True)
+    st.markdown('<div class="efeito-lateral-baixo2"></div>', unsafe_allow_html=True)
 
-        st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('<h1 class="titulo">S.I.S.E</h1>', unsafe_allow_html=True)
+
+    col1, col2, col3 = st.columns([1, 2, 1])
+
+    with col2:
+        with st.form(key="fazer-login"):
+            st.markdown('<div class="caixa-login">', unsafe_allow_html=True)
+            
+            usuario = st.text_input("Nome de usuário:", label_visibility="collapsed", placeholder="Nome de usuário:")
+            senha = st.text_input("Senha:", label_visibility="collapsed", type="password", placeholder="Senha:")
+
+            botao = st.form_submit_button("Entrar", use_container_width=True)
+
+            st.markdown('</div>', unsafe_allow_html=True)
+
+            if botao:
+                cargo_id, nome_usuario = LoginController.AutenticarUsuario(usuario, senha)
+
+                if cargo_id:
+                    entrar(cargo_id, nome_usuario)
+                else:
+                    st.error("Nome de usuário ou senha incorretos.")
+
+    pass

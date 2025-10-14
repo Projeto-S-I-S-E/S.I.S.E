@@ -27,8 +27,28 @@ def Adicionar(central):
         print(f"Erro ao adicionar Central: {e}")
         db.cnxn.rollback()
         return False
+    
+def Inativar(idCentral):
+    try:
+        sql_update_central = "UPDATE Central SET status = 0 WHERE idCentral = ?"
+        db.cursor.execute(sql_update_central, idCentral)
+
+        sql_select_nome = "SELECT nome FROM Central WHERE idCentral = ?"
+        db.cursor.execute(sql_select_nome, idCentral)
+        nome_central = db.cursor.fetchone()[0]
+
+        sql_update_perfil = "UPDATE Perfil SET status = 0 WHERE nome = ? AND idCargo = 2"
+        db.cursor.execute(sql_update_perfil, nome_central)
+
+        db.cnxn.commit()
+        return True
+    
+    except Exception as e:
+        print(f"Erro ao inativar Central: {e}")
+        db.cnxn.rollback()
+        return False
 
 def SelecionarNome():
-    db.cursor.execute("SELECT idCentral, nome FROM Central")
+    db.cursor.execute("SELECT idCentral, nome FROM Central WHERE status = 1")
 
     return db.cursor.fetchall()
