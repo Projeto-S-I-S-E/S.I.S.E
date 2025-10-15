@@ -21,7 +21,7 @@ def Inativar(idRegional):
         return False
 
 def SelecionarNome():
-    db.cursor.execute("SELECT idRegional, nome FROM Regional")
+    db.cursor.execute("SELECT idRegional, nome FROM Regional WHERE status = 1")
 
     return db.cursor.fetchall()
 

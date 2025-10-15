@@ -1,5 +1,16 @@
 import streamlit as st
 
+DASHBOARDS = {
+    1: "ADMIN_DASHBOARD",
+    2: "CENTRAL_DASHBOARD",
+    3: "PLANTONISTA_DASHBOARD",
+    4: "USUARIO_TELA"
+}
+
+def rota_cargo_dashboard():
+    cargo_id = st.session_state.get('usuario_cargo_id')
+    return DASHBOARDS.get(cargo_id)
+
 def navegar_para(chave_pagina):
     st.session_state['pagina_atual'] = chave_pagina
     st.rerun()

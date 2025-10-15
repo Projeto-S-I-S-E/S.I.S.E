@@ -4,8 +4,11 @@ import pages.ConCentralView as ConCentralView
 import pages.CadCentralView as CadCentralView
 import pages.ConRegionalView as ConRegionalView
 import pages.CadRegionalView as CadRegionalView
+import pages.ConPlantonistaView as ConPlantonistaView
+import pages.CadPlantonistaView as CadPlantonistaView
 import time
 from pages.Dashboard import dashboard_por_cargo
+from utils.utils import DASHBOARDS
 
 st.markdown("""
 <style>
@@ -118,13 +121,6 @@ if 'usuario_nome' not in st.session_state:
 if 'pagina_atual' not in st.session_state:
     st.session_state['pagina_atual'] = None
 
-DASHBOARDS = {
-    1: "ADMIN_DASHBOARD",
-    2: "CENTRAL_DASHBOARD",
-    3: "PLANTONISTA_DASHBOARD",
-    4: "USUARIO_TELA"
-}
-
 def entrar(cargo_id, nome_usuario):
     st.session_state['logado'] = True
     st.session_state['usuario_cargo_id'] = cargo_id
@@ -179,7 +175,9 @@ if st.session_state['logado']:
     elif st.session_state['pagina_atual'] == "REGIONAL_CADASTRO":
         CadRegionalView.renderizar_cadastro()
     elif st.session_state['pagina_atual'] == "PLANTONISTA_LISTA":
-        st.title("Lista de Plantonistas")
+        ConPlantonistaView.renderizar_pagina()
+    elif st.session_state['pagina_atual'] == "PLANTONISTA_CADASTRO":
+        CadPlantonistaView.renderizar_cadastro()
 
 else:
 

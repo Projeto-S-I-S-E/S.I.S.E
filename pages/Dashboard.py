@@ -3,10 +3,7 @@ import Controllers.DashboardAdmController as DashboardAdmController
 import Controllers.DashboardCentralController as DashboardCentralController
 import Controllers.DashboardPlantonistaController as DashboardPlantonistaController
 import time
-
-def navegar_para(chave_pagina):
-    st.session_state['pagina_atual'] = chave_pagina
-    st.rerun()
+from utils.utils import Sair, navegar_para
 
 def dashboard_por_cargo(cargo_id, nome_usuario):
     
@@ -119,10 +116,7 @@ def dashboard_por_cargo(cargo_id, nome_usuario):
     st.markdown('<div class="barra-superior"></div>', unsafe_allow_html=True)
 
     if st.button("Sair", key="botaoSair", type="secondary"):
-        st.session_state['logado'] = False
-        st.session_state['usuario_cargo_id'] = None
-        st.session_state['pagina_atual'] = None
-        st.rerun()
+        Sair()
 
     if cargo_id == 1:
 

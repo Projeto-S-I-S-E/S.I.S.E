@@ -1,6 +1,6 @@
 import streamlit as st
 import Controllers.RegionalController as RegionalController
-from utils.utils import Sair, navegar_para
+from utils.utils import Sair, navegar_para, rota_cargo_dashboard
 
 def renderizar_pagina():
 
@@ -98,6 +98,22 @@ def renderizar_pagina():
             z-index: 2;
         }
                 
+        .st-key-botaoVoltarDashboard div[data-testid="stButton"] button{
+            position: fixed;
+            top: 0;
+            left: 0;
+            margin-top: 2%;
+            margin-left: 2%;
+            z-index: 10;
+            background-color: #446A8A;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1.1em;
+            cursor: pointer;
+        }
+                
         .botao{
             background-color: #446A8A;
             color: white;
@@ -144,6 +160,14 @@ def renderizar_pagina():
 
     if st.button("Sair", key="botaoSair", type="secondary"):
         Sair()
+
+    rota_dashboard = rota_cargo_dashboard()
+
+    if st.button("← Voltar para Dashboard", key="botaoVoltarDashboard"):
+        if rota_dashboard:
+            navegar_para(rota_dashboard)
+        else:
+            Sair()
 
     st.markdown('<h1 class="titulo">Regionais:</h1>', unsafe_allow_html=True)
     
