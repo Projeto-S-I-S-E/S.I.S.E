@@ -1,5 +1,5 @@
 import streamlit as st
-import Controllers.CentralController as CentralController
+import Controllers.RegionalController as RegionalController
 from utils.utils import Sair, navegar_para
 
 def renderizar_pagina():
@@ -116,10 +116,9 @@ def renderizar_pagina():
             margin-right: 5%;
             width: 80px;
             height: 40px;
-            z-index: 10;
         }
                 
-        #botaoNovaCentral{
+        #botaoNovaRegional{
             position: fixed;
             top: 0;
             right: 0;
@@ -146,12 +145,12 @@ def renderizar_pagina():
     if st.button("Sair", key="botaoSair", type="secondary"):
         Sair()
 
-    st.markdown('<h1 class="titulo">Central:</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="titulo">Regionais:</h1>', unsafe_allow_html=True)
+    
+    if st.button("Nova regional", key="botaoNovaRegional"):
+        navegar_para('REGIONAL_CADASTRO')
 
-    if st.button("Nova central", key="botaoNovaCentral"):
-        navegar_para('CENTRAL_CADASTRO')
-
-    lista_de_centrais = CentralController.SelecionarNome()
+    lista_de_regionais = RegionalController.SelecionarNome()
 
     st.markdown("""
     <div style="
@@ -162,22 +161,22 @@ def renderizar_pagina():
         overflow-y: auto;">
     """, unsafe_allow_html=True)
 
-    for central in lista_de_centrais:
+    for regional in lista_de_regionais:
         st.markdown(f'<div class="barra-lista-item">', unsafe_allow_html=True)
         
         col_titulo, col_editar, col_excluir = st.columns([10, 1, 1])
 
         with col_titulo:
-            st.markdown(f'<span class="lista-titulo">{central.nome}</span>', unsafe_allow_html=True)
+            st.markdown(f'<span class="lista-titulo">{regional.nome}</span>', unsafe_allow_html=True)
 
         with col_editar:
-            if st.button("✎", key=f"editar_{central.idCentral}"):
-                st.session_state['central_id_para_editar'] = central.idCentral
-                navegar_para('CENTRAL_CADASTRO') 
+            if st.button("✎", key=f"editar_{regional.idRegional}"):
+                st.session_state['regional_id_para_editar'] = regional.idRegional
+                navegar_para('REGIONAL_CADASTRO') 
 
         with col_excluir:
-            if st.button("✖", key=f"excluir_{central.idCentral}"):
-                CentralController.Inativar(central.idCentral)
+            if st.button("✖", key=f"excluir_{regional.idRegional}"):
+                RegionalController.Inativar(regional.idRegional)
                 st.rerun()
 
         st.markdown('</div>', unsafe_allow_html=True)

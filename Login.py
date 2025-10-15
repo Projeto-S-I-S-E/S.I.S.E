@@ -1,6 +1,9 @@
 import streamlit as st
 import Controllers.LoginController as LoginController
 import pages.ConCentralView as ConCentralView
+import pages.CadCentralView as CadCentralView
+import pages.ConRegionalView as ConRegionalView
+import pages.CadRegionalView as CadRegionalView
 import time
 from pages.Dashboard import dashboard_por_cargo
 
@@ -131,28 +134,7 @@ def entrar(cargo_id, nome_usuario):
     time.sleep(1)
     st.rerun()
 
-def sair():
-    st.session_state['logado'] = False
-    st.session_state['usuario_cargo_id'] = None
-    st.session_state['usuario_nome'] = None
-    st.session_state['pagina_atual'] = None
-    st.rerun()
-
-if st.session_state['logado']:
-
-    cargo_id = st.session_state['usuario_cargo_id']
-    nome_usuario = st.session_state['usuario_nome']
-
-    if st.session_state['pagina_atual'] in ["ADMIN_DASHBOARD", "CENTRAL_DASHBOARD", "PLANTONISTA_DASHBOARD"]:
-        dashboard_por_cargo(cargo_id, nome_usuario)
-    elif st.session_state['pagina_atual'] == "CENTRAL_LISTA":
-        ConCentralView.renderizar_pagina()
-    elif st.session_state['pagina_atual'] == "REGIONAL_LISTA":
-        st.title("Lista de Regionais")
-    elif st.session_state['pagina_atual'] == "PLANTONISTA_LISTA":
-        st.title("Lista de Plantonistas")
-
-else:
+def renderizar_login():
 
     st.markdown('<div class="efeito-lateral-cima"></div>', unsafe_allow_html=True)
     st.markdown('<div class="efeito-lateral-baixo1"></div>', unsafe_allow_html=True)
@@ -181,4 +163,24 @@ else:
                 else:
                     st.error("Nome de usuário ou senha incorretos.")
 
-    pass
+if st.session_state['logado']:
+
+    cargo_id = st.session_state['usuario_cargo_id']
+    nome_usuario = st.session_state['usuario_nome']
+
+    if st.session_state['pagina_atual'] in ["ADMIN_DASHBOARD", "CENTRAL_DASHBOARD", "PLANTONISTA_DASHBOARD"]:
+        dashboard_por_cargo(cargo_id, nome_usuario)
+    elif st.session_state['pagina_atual'] == "CENTRAL_LISTA":
+        ConCentralView.renderizar_pagina()
+    elif st.session_state['pagina_atual'] == "CENTRAL_CADASTRO":
+        CadCentralView.renderizar_cadastro()
+    elif st.session_state['pagina_atual'] == "REGIONAL_LISTA":
+        ConRegionalView.renderizar_pagina()
+    elif st.session_state['pagina_atual'] == "REGIONAL_CADASTRO":
+        CadRegionalView.renderizar_cadastro()
+    elif st.session_state['pagina_atual'] == "PLANTONISTA_LISTA":
+        st.title("Lista de Plantonistas")
+
+else:
+
+    renderizar_login()
