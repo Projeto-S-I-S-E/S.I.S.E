@@ -75,14 +75,19 @@ def dashboard_por_cargo(cargo_id, nome_usuario):
             z-index: 2;
         }
                 
-        #botaoSair{
+        .st-key-botaoSair div[data-testid="stButton"] button{
             position: fixed;
             top: 0;
             right: 0;
             margin-top: 2%;
             margin-right: 5%;
+            background-color: #446A8A;
+            color: white;
             width: 80px;
             height: 40px;
+            border-radius: 5px;
+            border: none;
+            z-index: 10;
         }
                 
         div[data-testid="column"] > div > div > [data-testid="stButton"] button {
@@ -182,7 +187,3 @@ def dashboard_por_cargo(cargo_id, nome_usuario):
                 """, unsafe_allow_html=True)
                 
         st.markdown('</div>', unsafe_allow_html=True)
-
-    st.markdown('<div class="barra-perfil">', unsafe_allow_html=True)
-    st.markdown(f'<p id="nome-perfil">Perfil {nome_usuario}</p>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)

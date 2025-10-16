@@ -15,6 +15,11 @@ def renderizar_pagina():
             font-family: Arial;
         }
                 
+        .stMain div[data-testid="stMainBlockContainer"]{
+            margin-left: 150px;
+            max-width: 836px;        
+        }
+                
         .barra-lateral{
             position: fixed;
             bottom: 0;
@@ -38,7 +43,7 @@ def renderizar_pagina():
         }
 
         .barra-lista-item{
-            width: 120%;
+            width: 100%;
             height: 80px;
             border: 1px solid #000000;
             border-radius: 5px;
@@ -50,6 +55,7 @@ def renderizar_pagina():
         }
 
         .lista-titulo {
+            margin-left: 20px;
             font-size: 1.5em;
             font-weight: bold;
             color: #000000;
@@ -61,16 +67,12 @@ def renderizar_pagina():
             gap: 10px;
         }
 
-        .botao-lista {
-            background-color: #7B1A1E;
-            border: 1px solid #440C0E;
-            width: 25px;
-            height: 25px;
-            cursor: pointer;
-            border-radius: 5px;
-            color: white;
-            display: inline-block;
-            padding: 0;
+        .st-key-excluir div[data-testid="stButton"] button{
+            background-color: #6D0404;
+        }
+        
+        .st-key-editar div[data-testid="stButton"] button{
+            background-color: #2A475D;
         }
                 
         .barra-perfil{
@@ -104,6 +106,7 @@ def renderizar_pagina():
             left: 0;
             margin-top: 2%;
             margin-left: 2%;
+            height: 40px;
             z-index: 10;
             background-color: #446A8A;
             color: white;
@@ -111,37 +114,41 @@ def renderizar_pagina():
             border-radius: 5px;
             border: none;
             font-size: 1.1em;
+            letter-spacing: 0.15em;
             cursor: pointer;
         }
                 
-        .botao{
-            background-color: #446A8A;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 1.1em;
-            letter-spacing: 0.15em;
-            z-index: 2;
-        }
-                
-        #botaoSair{
+        .st-key-botaoSair div[data-testid="stButton"] button{
             position: fixed;
             top: 0;
             right: 0;
             margin-top: 2%;
             margin-right: 5%;
+            background-color: #446A8A;
+            color: white;
             width: 80px;
             height: 40px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1.1em;
+            letter-spacing: 0.15em;
             z-index: 10;
         }
                 
-        #botaoNovaCentral{
+        .st-key-botaoNovaCentral div[data-testid="stButton"] button{
             position: fixed;
             top: 0;
             right: 0;
             margin-top: 10%;
             margin-right: 5%;
+            background-color: #446A8A;
+            color: white;
             height: 40px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1.1em;
+            letter-spacing: 0.15em;
+            z-index: 10;
         }
                 
         .titulo{
@@ -195,12 +202,12 @@ def renderizar_pagina():
             st.markdown(f'<span class="lista-titulo">{central.nome}</span>', unsafe_allow_html=True)
 
         with col_editar:
-            if st.button("✎", key=f"editar_{central.idCentral}"):
+            if st.button("✎", key="editar"):
                 st.session_state['central_id_para_editar'] = central.idCentral
                 navegar_para('CENTRAL_CADASTRO') 
 
         with col_excluir:
-            if st.button("✖", key=f"excluir_{central.idCentral}"):
+            if st.button("✖", key="excluir"):
                 CentralController.Inativar(central.idCentral)
                 st.rerun()
 

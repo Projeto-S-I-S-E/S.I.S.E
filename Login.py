@@ -10,6 +10,11 @@ import time
 from pages.Dashboard import dashboard_por_cargo
 from utils.utils import DASHBOARDS
 
+st.set_page_config(
+    page_title="S.I.S.E",
+    initial_sidebar_state="collapsed"
+)
+
 st.markdown("""
 <style>
     #MainMenu {visibility: hidden;}
@@ -166,16 +171,28 @@ if st.session_state['logado']:
 
     if st.session_state['pagina_atual'] in ["ADMIN_DASHBOARD", "CENTRAL_DASHBOARD", "PLANTONISTA_DASHBOARD"]:
         dashboard_por_cargo(cargo_id, nome_usuario)
+        st.markdown('<div class="barra-perfil">', unsafe_allow_html=True)
+        st.markdown(f'<p id="nome-perfil">Perfil {nome_usuario}</p>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
     elif st.session_state['pagina_atual'] == "CENTRAL_LISTA":
         ConCentralView.renderizar_pagina()
+        st.markdown('<div class="barra-perfil">', unsafe_allow_html=True)
+        st.markdown(f'<p id="nome-perfil">Perfil {nome_usuario}</p>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
     elif st.session_state['pagina_atual'] == "CENTRAL_CADASTRO":
         CadCentralView.renderizar_cadastro()
     elif st.session_state['pagina_atual'] == "REGIONAL_LISTA":
         ConRegionalView.renderizar_pagina()
+        st.markdown('<div class="barra-perfil">', unsafe_allow_html=True)
+        st.markdown(f'<p id="nome-perfil">Perfil {nome_usuario}</p>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
     elif st.session_state['pagina_atual'] == "REGIONAL_CADASTRO":
         CadRegionalView.renderizar_cadastro()
     elif st.session_state['pagina_atual'] == "PLANTONISTA_LISTA":
         ConPlantonistaView.renderizar_pagina()
+        st.markdown('<div class="barra-perfil">', unsafe_allow_html=True)
+        st.markdown(f'<p id="nome-perfil">Perfil {nome_usuario}</p>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
     elif st.session_state['pagina_atual'] == "PLANTONISTA_CADASTRO":
         CadPlantonistaView.renderizar_cadastro()
 
