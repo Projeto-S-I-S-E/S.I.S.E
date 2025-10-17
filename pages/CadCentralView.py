@@ -5,6 +5,23 @@ from utils.utils import navegar_para
 
 def renderizar_cadastro():
 
+    central_id = st.session_state.get('central_id_editar', None)
+    central_dados = None
+
+    nome_inicial = ""
+    usuario_inicial = ""
+
+    if central_id:
+        titulo_pagina = "Edição Central"
+        central_dados = CentralController.SelecionarPorId(central_id)
+
+        if central_dados:
+            nome_inicial = central_dados['nome']
+            usuario_inicial = central_dados['usuario']
+
+    else:
+        titulo_pagina = "Cadastro Central"
+
     st.markdown("""
     <style>
         #MainMenu {visibility: hidden;}
@@ -139,34 +156,59 @@ def renderizar_cadastro():
     st.markdown('<div class="efeito-lateral-baixo2"></div>', unsafe_allow_html=True)
 
     if st.button("← Voltar para Lista"):
+        if central_id:
+            del st.session_state['central_id_editar']
         navegar_para('CENTRAL_LISTA')
 
-    st.markdown('<h1 class="titulo">Cadastro Central</h1>', unsafe_allow_html=True)
+    st.markdown(f'<h1 class="titulo">{titulo_pagina}</h1>', unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns([1, 4, 1])
 
     with col2:
-        with st.form(key="cadastrar-central"):
+        form_key = "editar-central" if central_id else "cadastrar-central"
+        with st.form(key=form_key):
 
-            nome = st.text_input("Nome:", label_visibility="collapsed", placeholder="Nome:")
-            usuario = st.text_input("Nome de usuário:", label_visibility="collapsed", placeholder="Nome de usuário:")
-            senha = st.text_input("Senha:", label_visibility="collapsed", type="password", placeholder="Senha:")
+            nome = st.text_input("Nome:", value=nome_inicial, label_visibility="collapsed", placeholder="Nome:")
+            usuario = st.text_input("Nome de usuário:", value=usuario_inicial, label_visibility="collapsed", placeholder="Nome de usuário:")
+            senha = st.text_input("Senha:", label_visibility="collapsed", type="password", placeholder="Senha: (deixe em branco para não alterar)" if central_id else "Senha:")
 
-            botao = st.form_submit_button("Cadastrar", use_container_width=True)
+            rotulo_botao = "Salvar" if central_id else "Cadastrar"
+            botao = st.form_submit_button(rotulo_botao, use_container_width=True)
 
     if botao:
-        if nome and usuario and senha:
+        if nome and usuario and (central_id or senha):
 
-            nova_central = Central(
-                id = None,
-                nome = nome,
-                usuario = usuario,
-                senha = senha,
-                status = 1
-            )
+            if central_id:
 
-            CentralController.Adicionar(nova_central)
-            st.success("Central cadastrada com sucesso!")
-            navegar_para('CENTRAL_LISTA')
+                atualizar_central = Central(
+                    id = central_id,
+                    nome = nome,
+                    usuario = usuario,
+                    senha = None, 
+                    status = central_dados['status']
+                )
+
+                if CentralController.Atualizar(atualizar_central, nova_senha=senha if senha else None):
+                    st.success("Central atualizada com sucesso!")
+                    del st.session_state['central_id_editar']
+                    navegar_para('CENTRAL_LISTA')
+                else:
+                    st.error("Erro ao atualizar Central.")
+
+            else:
+
+                nova_central = Central(
+                    id = None,
+                    nome = nome,
+                    usuario = usuario,
+                    senha = senha,
+                    status = 1
+                )
+
+                if CentralController.Adicionar(nova_central):
+                    st.success("Central cadastrada com sucesso!")
+                    navegar_para('CENTRAL_LISTA')
+                else:
+                    st.error("Erro ao cadastrar Central.")
         else:
-            st.error("Por favor, preencha todos os campos obrigatórios.")
+            st.error("Por favor, preencha o Nome, Nome de Usuário e Senha (Senha é obrigatória no Cadastro).")

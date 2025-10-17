@@ -5,6 +5,25 @@ from utils.utils import navegar_para
 
 def renderizar_cadastro():
 
+    plantonista_id = st.session_state.get('plantonista_id_editar')
+    plantonista_dados = None
+
+    nome_inicial = ""
+    regional_inicial_nome = None
+    usuario_inicial = ""
+
+    if plantonista_id:
+        titulo_pagina = "Edição Plantonista"
+        plantonista_dados = PlantonistaController.SelecionarPorId(plantonista_id)
+
+        if plantonista_dados:
+            nome_inicial = plantonista_dados['nome']
+            usuario_inicial = plantonista_dados['usuario']
+            regional_inicial_nome = plantonista_dados['nomeRegional']
+
+    else:
+        titulo_pagina = "Cadastro Plantonista"
+
     st.markdown("""
     <style>
         #MainMenu {visibility: hidden;}
@@ -137,9 +156,11 @@ def renderizar_cadastro():
     st.markdown('<div class="efeito-lateral-baixo2"></div>', unsafe_allow_html=True)
 
     if st.button("← Voltar para Lista"):
+        if plantonista_id:
+            del st.session_state['plantonista_id_editar']
         navegar_para('PLANTONISTA_LISTA')
 
-    st.markdown('<h1 class="titulo">Cadastro Plantonista</h1>', unsafe_allow_html=True)
+    st.markdown(f'<h1 class="titulo">{titulo_pagina}</h1>', unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns([1, 4, 1])
 
@@ -148,33 +169,59 @@ def renderizar_cadastro():
     regionais_nome = [nome for idRegional, nome in regionais_data]
     regionais_id = {nome: idRegional for idRegional, nome in regionais_data}
 
+    index_regional = regionais_nome.index(regional_inicial_nome) if regional_inicial_nome in regionais_nome else None
+
     with col2:
-        with st.form(key="cadastrar-plantonista"):
+        form_key = "editar-plantonista" if plantonista_id else "cadastrar-plantonista"
+        with st.form(key=form_key):
 
-            nome_plantonista = st.text_input("Nome:", label_visibility="collapsed", placeholder="Nome:")
-            nome_regional = st.selectbox("Região de atuação:", regionais_nome, label_visibility="collapsed", index=None, placeholder="Região de atuação:")
-            usuario = st.text_input("Nome de usuário:", label_visibility="collapsed", placeholder="Nome de usuário:")
-            senha = st.text_input("Senha:", label_visibility="collapsed", type="password", placeholder="Senha:")
+            nome_plantonista = st.text_input("Nome:", value=nome_inicial, label_visibility="collapsed", placeholder="Nome:")
+            nome_regional = st.selectbox("Região de atuação:", regionais_nome, index=index_regional, label_visibility="collapsed", placeholder="Região de atuação:")
+            usuario = st.text_input("Nome de usuário:", value=usuario_inicial, label_visibility="collapsed", placeholder="Nome de usuário:")
+            senha_placeholder = "Senha: (deixe em branco para não alterar)" if plantonista_id else "Senha:"
+            senha = st.text_input("Senha:", label_visibility="collapsed", type="password", placeholder=senha_placeholder)
 
-            botao = st.form_submit_button("Cadastrar", use_container_width=True)
+            rotulo_botao = "Salvar" if plantonista_id else "Cadastrar"
+            botao = st.form_submit_button(rotulo_botao, use_container_width=True)
 
-    if nome_regional:
-        id_regional = regionais_id[nome_regional]
+    id_regional = regionais_id.get(nome_regional)
 
     if botao:
-        if nome_plantonista and id_regional and usuario and senha:
+        if nome_plantonista and id_regional and usuario and (senha or plantonista_id):
 
-            novo_plantonista = Plantonista(
-                id = None,
-                regional = id_regional,
-                nome = nome_plantonista,
-                usuario = usuario,
-                senha = senha,
-                status = 1
-            )
+            if plantonista_id:
 
-            PlantonistaController.Adicionar(novo_plantonista)
-            st.success("Plantonista cadastrado com sucesso!")
-            navegar_para('PLANTONISTA_LISTA')
+                atualizar_plantonista = Plantonista(
+                    id = plantonista_id,
+                    regional = id_regional,
+                    nome = nome_plantonista,
+                    usuario = usuario,
+                    senha = None,
+                    status = plantonista_dados['status']
+                )
+
+                if PlantonistaController.Atualizar(atualizar_plantonista, nova_senha=senha if senha else None):
+                    st.success("Plantonista atualizado com sucesso!")
+                    del st.session_state['plantonista_id_editar']
+                    navegar_para('PLANTONISTA_LISTA')
+                else:
+                    st.error("Erro ao atualizar Plantonista.")
+
+            else:
+
+                novo_plantonista = Plantonista(
+                    id = None,
+                    regional = id_regional,
+                    nome = nome_plantonista,
+                    usuario = usuario,
+                    senha = senha,
+                    status = 1
+                )
+
+                if PlantonistaController.Adicionar(novo_plantonista):
+                    st.success("Plantonista cadastrado com sucesso!")
+                    navegar_para('PLANTONISTA_LISTA')
+                else:
+                    st.error("Erro ao cadastrar Plantonista.")
         else:
-            st.error("Por favor, preencha todos os campos obrigatórios.")
+            st.error("Por favor, preencha o Nome, Nome de Usuário, Senha e selecione a Região (Senha é opcional na edição).")

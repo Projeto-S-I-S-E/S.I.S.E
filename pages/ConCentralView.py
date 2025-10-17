@@ -203,7 +203,7 @@ def renderizar_pagina():
 
         with col_editar:
             if st.button("✎", key="editar"):
-                st.session_state['central_id_para_editar'] = central.idCentral
+                st.session_state['central_id_editar'] = central.idCentral
                 navegar_para('CENTRAL_CADASTRO') 
 
         with col_excluir:
