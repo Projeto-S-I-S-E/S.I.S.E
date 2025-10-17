@@ -203,7 +203,7 @@ def renderizar_pagina():
 
         with col_editar:
             if st.button("✎", key=f"editar"):
-                st.session_state['regional_id_para_editar'] = regional.idRegional
+                st.session_state['regional_id_editar'] = regional.idRegional
                 navegar_para('REGIONAL_CADASTRO') 
 
         with col_excluir:
