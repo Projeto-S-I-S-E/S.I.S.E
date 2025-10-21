@@ -6,9 +6,10 @@ import pages.ConRegionalView as ConRegionalView
 import pages.CadRegionalView as CadRegionalView
 import pages.ConPlantonistaView as ConPlantonistaView
 import pages.CadPlantonistaView as CadPlantonistaView
+import pages.CadUsuarioView as CadUsuarioView
 import time
 from pages.Dashboard import dashboard_por_cargo
-from utils.utils import DASHBOARDS
+from utils.utils import DASHBOARDS, navegar_para
 
 st.set_page_config(
     page_title="S.I.S.E",
@@ -45,6 +46,15 @@ st.markdown("""
     .stTextInput input::-moz-placeholder {
         color: #000000;
         opacity: 0.5;
+    }
+            
+    .stButton button{
+        background-color: #9c9a9a;
+        color: white;
+        border: 1px solid #000000;
+        border-radius: 5px;
+        font-size: 1.1em;
+        width: 30%;
     }
             
     .stFormSubmitButton button{
@@ -146,10 +156,11 @@ def renderizar_login():
     col1, col2, col3 = st.columns([1, 2, 1])
 
     with col2:
+        
         with st.form(key="fazer-login"):
             st.markdown('<div class="caixa-login">', unsafe_allow_html=True)
             
-            usuario = st.text_input("Nome de usuário:", label_visibility="collapsed", placeholder="Nome de usuário:")
+            usuario = st.text_input("Nome de usuário/E-mail:", label_visibility="collapsed", placeholder="Nome de usuário/E-mail:")
             senha = st.text_input("Senha:", label_visibility="collapsed", type="password", placeholder="Senha:")
 
             botao = st.form_submit_button("Entrar", use_container_width=True)
@@ -163,6 +174,9 @@ def renderizar_login():
                     entrar(cargo_id, nome_usuario)
                 else:
                     st.error("Nome de usuário ou senha incorretos.")
+
+        if st.button("Cadastrar", key="btn_cadastro"):
+            navegar_para('USUARIO_CADASTRO')
 
 if st.session_state['logado']:
 
@@ -195,6 +209,8 @@ if st.session_state['logado']:
         st.markdown('</div>', unsafe_allow_html=True)
     elif st.session_state['pagina_atual'] == "PLANTONISTA_CADASTRO":
         CadPlantonistaView.renderizar_cadastro()
+    elif st.session_state['pagina_atual'] == "USUARIO_CADASTRO":
+        CadUsuarioView.renderizar_cadastro()
 
 else:
 
