@@ -37,10 +37,6 @@ def renderizar_cadastro():
             font-family: Arial;
         }
                 
-        .stMain div[data-testid="stMainBlockContainer"]{
-            max-width: 836px;        
-        }
-                
         .stForm {
             border: none;
             margin-left: -20%;
@@ -77,7 +73,8 @@ def renderizar_cadastro():
             color: white;
             padding: 10px;
             border-radius: 5px;
-            border: none;  
+            border: none;
+            letter-spacing: 0.15em;
         }
                 
         .stFormSubmitButton button{
@@ -150,7 +147,7 @@ def renderizar_cadastro():
             color: #FFFFFF;
             text-align: center;
             margin-top: -100px !important;
-            margin-right: 120px !important;
+            margin-left: 40px !important;
             margin-bottom: 30px !important;
             font-size: 4em !important;
             opacity: 0.5;

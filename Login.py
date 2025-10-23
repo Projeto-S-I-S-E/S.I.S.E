@@ -48,7 +48,7 @@ st.markdown("""
         opacity: 0.5;
     }
             
-    .stButton button{
+    .st-key-btn_cadastro div[data-testid="stButton"] button{
         background-color: #9c9a9a;
         color: white;
         border: 1px solid #000000;

@@ -16,7 +16,17 @@ def dashboard_por_cargo(cargo_id, nome_usuario):
         .stApp{
             background-color: #6B8BB6;
             font-family: Arial;
-        }   
+        }
+                
+        .stMain div[data-testid="stMainBlockContainer"]{
+            margin-left: 120px;
+            max-width: 900px;
+        }
+                
+        .stVerticalBlock div[data-testid="stHorizontalBlock"]{
+            flex-wrap: nowrap;
+            gap: 5rem;        
+        }
                 
         .barra-lateral{
             position: fixed;
