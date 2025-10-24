@@ -16,7 +16,17 @@ def dashboard_por_cargo(cargo_id, nome_usuario):
         .stApp{
             background-color: #6B8BB6;
             font-family: Arial;
-        }   
+        }
+                
+        .stMain div[data-testid="stMainBlockContainer"]{
+            margin-left: 150px;
+            max-width: 920px;        
+        }
+                
+        .stVerticalBlock div[data-testid="stHorizontalBlock"]{
+            flex-wrap: nowrap;
+            gap: 5rem;        
+        }
                 
         .barra-lateral{
             position: fixed;
@@ -88,6 +98,7 @@ def dashboard_por_cargo(cargo_id, nome_usuario):
             border-radius: 5px;
             border: none;
             z-index: 10;
+            letter-spacing: 0.15em;
         }
                 
         div[data-testid="column"] > div > div > [data-testid="stButton"] button {
@@ -111,7 +122,7 @@ def dashboard_por_cargo(cargo_id, nome_usuario):
         .container-cards {
             margin-left: 11.5%;
             margin-right: 5%;
-            margin-top: 25%;
+            margin-top: 20%;
             width: 83.5%;
         }
     </style>

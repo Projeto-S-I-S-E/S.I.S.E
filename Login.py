@@ -48,13 +48,16 @@ st.markdown("""
         opacity: 0.5;
     }
             
-    .stButton button{
+    .st-key-btn_cadastro div[data-testid="stButton"] button{
+        position: absolute;
         background-color: #9c9a9a;
         color: white;
         border: 1px solid #000000;
         border-radius: 5px;
         font-size: 1.1em;
         width: 30%;
+        margin-top: -88px;
+        margin-left: 16px;
     }
             
     .stFormSubmitButton button{
@@ -65,7 +68,7 @@ st.markdown("""
         font-size: 1.1em;
         width: 30%;
         margin-top: 10px;
-        margin-left: 218px;
+        margin-left: 216px;
     }
 
     .efeito-lateral-cima {
@@ -178,7 +181,10 @@ def renderizar_login():
         if st.button("Cadastrar", key="btn_cadastro"):
             navegar_para('USUARIO_CADASTRO')
 
-if st.session_state['logado']:
+if st.session_state['pagina_atual'] == "USUARIO_CADASTRO":
+    CadUsuarioView.renderizar_cadastro()
+
+elif st.session_state['logado']:
 
     cargo_id = st.session_state['usuario_cargo_id']
     nome_usuario = st.session_state['usuario_nome']
@@ -209,8 +215,6 @@ if st.session_state['logado']:
         st.markdown('</div>', unsafe_allow_html=True)
     elif st.session_state['pagina_atual'] == "PLANTONISTA_CADASTRO":
         CadPlantonistaView.renderizar_cadastro()
-    elif st.session_state['pagina_atual'] == "USUARIO_CADASTRO":
-        CadUsuarioView.renderizar_cadastro()
 
 else:
 
