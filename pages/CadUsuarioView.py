@@ -17,22 +17,23 @@ def renderizar_cadastro():
         header {visibility: hidden;}
 
         .stApp {
+            width: 608px;
+            height: 1080px;
             background-color: #6B8BB6;
             font-family: Arial;
         }
                 
         .stMain div[data-testid="stMainBlockContainer"]{
-            margin-left: 150px;
-            max-width: 836px;        
+            margin-top: 110px;
+            max-width: 736px;        
         }
                 
         .stForm {
             border: none;
-            margin-left: -20%;
         }
         
         .stTextInput div[data-baseweb="input"]{
-            width: 70%;
+            width: 100%;
             border: none;        
         }
 
@@ -56,8 +57,8 @@ def renderizar_cadastro():
                 
         .st-key-voltarLogin div[data-testid="stButton"] button{
             position: fixed;
-            top: 2%;
-            left: 2%;
+            top: 8%;
+            left: 4%;
             z-index: 1000;
             background-color: #446A8A;
             color: white;
@@ -72,10 +73,10 @@ def renderizar_cadastro():
             color: white;
             border-radius: 5px;
             border: none;
-            font-size: 1.1em;
-            width: 27%;
+            font-size: 2em;
+            width: 30%;
             margin-top: 5%;
-            margin-left: 100%;
+            margin-left: 190px;
             letter-spacing: 0.15em;
         }
                 
@@ -97,57 +98,46 @@ def renderizar_cadastro():
             color: #000000;
             opacity: 0.5;
         }
-
-        .efeito-lateral-cima {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 400px;
-            height: 50vh;
-            background-color: #FFFFFF;
-            z-index: 1;
-            clip-path: ellipse(80% 100% at 0% 70%);
-            transform: scaleY(-1);
-        }
-
-        .efeito-lateral-baixo1 {
-            position: fixed;
-            top: 50%;
-            left: 0;
-            width: 265px;
-            height: 50vh;
-            background-color: #FFFFFF;
-            z-index: 1;
-            clip-path: ellipse(100% 100% at 0% 50%);
-        }
-            
-        .efeito-lateral-baixo2 {
-            position: fixed;
-            top: 50%;
-            left: 147px;
-            width: 150px;
-            height: 50vh;
-            background-color: #6B8BB6;
-            z-index: 1;
-            clip-path: ellipse(100% 90% at 0% 80%);
-            transform: scaleX(-1);
-        }
                 
         .titulo {
             color: #FFFFFF;
             text-align: center;
             margin-top: -100px !important;
-            margin-left: 40px !important;
+            margin-left: 20px !important;
             margin-bottom: 30px !important;
             font-size: 4em !important;
             opacity: 0.5;
         }
+                
+        .barra-topo{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5%;
+            border: 1px solid #000000;
+            border-radius: 0px 0px 35px 35px;
+            background-color: #D9D9D9;
+            z-index: 1;
+            clip-path: rect(0px 100% 100% 0px);
+        }
+                
+        .barra-baixo{
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5%;
+            border: 1px solid #000000;
+            border-radius: 35px 35px 0px 0px;
+            background-color: #D9D9D9;
+            z-index: 1;
+            clip-path: rect(0px 100% 100% 0px);
+        }
     </style>
     """, unsafe_allow_html=True)
 
-    st.markdown('<div class="efeito-lateral-cima"></div>', unsafe_allow_html=True)
-    st.markdown('<div class="efeito-lateral-baixo1"></div>', unsafe_allow_html=True)
-    st.markdown('<div class="efeito-lateral-baixo2"></div>', unsafe_allow_html=True)
+    st.markdown('<div class="barra-topo"></div>', unsafe_allow_html=True)
 
     if st.button("← Voltar para Login", key="voltarLogin"):
         Sair()
@@ -166,6 +156,8 @@ def renderizar_cadastro():
             confirmar_senha = st.text_input("Confirmar Senha:", label_visibility="collapsed", type="password", placeholder="Confirmar Senha:")
 
             botao = st.form_submit_button("Cadastrar", use_container_width=True)
+
+    st.markdown('<div class="barra-baixo"></div>', unsafe_allow_html=True)
 
     if botao:
 

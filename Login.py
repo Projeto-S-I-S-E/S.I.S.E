@@ -6,10 +6,9 @@ import pages.ConRegionalView as ConRegionalView
 import pages.CadRegionalView as CadRegionalView
 import pages.ConPlantonistaView as ConPlantonistaView
 import pages.CadPlantonistaView as CadPlantonistaView
-import pages.CadUsuarioView as CadUsuarioView
 import time
 from pages.Dashboard import dashboard_por_cargo
-from utils.utils import DASHBOARDS, navegar_para
+from utils.utils import DASHBOARDS
 
 st.set_page_config(
     page_title="S.I.S.E",
@@ -163,7 +162,7 @@ def renderizar_login():
         with st.form(key="fazer-login"):
             st.markdown('<div class="caixa-login">', unsafe_allow_html=True)
             
-            usuario = st.text_input("Nome de usuário/E-mail:", label_visibility="collapsed", placeholder="Nome de usuário/E-mail:")
+            usuario = st.text_input("Nome de usuário:", label_visibility="collapsed", placeholder="Nome de usuário:")
             senha = st.text_input("Senha:", label_visibility="collapsed", type="password", placeholder="Senha:")
 
             botao = st.form_submit_button("Entrar", use_container_width=True)
@@ -178,13 +177,7 @@ def renderizar_login():
                 else:
                     st.error("Nome de usuário ou senha incorretos.")
 
-        if st.button("Cadastrar", key="btn_cadastro"):
-            navegar_para('USUARIO_CADASTRO')
-
-if st.session_state['pagina_atual'] == "USUARIO_CADASTRO":
-    CadUsuarioView.renderizar_cadastro()
-
-elif st.session_state['logado']:
+if st.session_state['logado']:
 
     cargo_id = st.session_state['usuario_cargo_id']
     nome_usuario = st.session_state['usuario_nome']
