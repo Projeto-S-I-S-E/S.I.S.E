@@ -77,6 +77,8 @@ def renderizar_cadastro():
             border-radius: 5px;
             border: none;
             letter-spacing: 0.15em;
+            border: none;
+            letter-spacing: 0.15em;
         }
                 
         .stFormSubmitButton button{

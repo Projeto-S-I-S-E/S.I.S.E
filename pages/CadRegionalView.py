@@ -80,6 +80,8 @@ def renderizar_cadastro():
             border-radius: 5px;
             border: none;
             letter-spacing: 0.15em;
+            border: none;
+            letter-spacing: 0.15em;
         }
                 
         .stFormSubmitButton button{
@@ -152,7 +154,7 @@ def renderizar_cadastro():
             color: #FFFFFF;
             text-align: center;
             margin-top: -100px !important;
-            margin-right: 120px !important;
+            margin-left: 40px !important;
             margin-bottom: 30px !important;
             font-size: 4em !important;
             opacity: 0.5;
