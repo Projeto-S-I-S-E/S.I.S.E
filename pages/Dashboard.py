@@ -2,7 +2,6 @@ import streamlit as st
 import Controllers.DashboardAdmController as DashboardAdmController
 import Controllers.DashboardCentralController as DashboardCentralController
 import Controllers.DashboardPlantonistaController as DashboardPlantonistaController
-import time
 from utils.utils import Sair, navegar_para
 
 def dashboard_por_cargo(cargo_id, nome_usuario):

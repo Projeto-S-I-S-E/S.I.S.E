@@ -1,8 +1,8 @@
 import streamlit as st
-import Controllers.LoginController as LoginController
+import Controllers.LoginUsuarioController as LoginUsuarioController
 import pages.CadUsuarioView as CadUsuarioView
 import time
-from pages.Dashboard import dashboard_por_cargo
+from pages.DashboardUsuario import dashboard_por_cargo
 from utils.utils import DASHBOARDS, navegar_para
 
 st.set_page_config(
@@ -108,14 +108,15 @@ st.markdown("""
         margin-left: 55px;
     }
             
-    #nome-perfil{
+    #nome-usuario{
         position: fixed;
+        display: flex;
+        justify-content: center;
+        width: 100%;
         top: 0;
         right: 0;
-        margin-right: 38% !important;
-        margin-bottom: 0.5%;
-        color: #000000;
-        font-size: 1.3em !important;
+        margin-top: 0.5%;
+        color: #636060;
         z-index: 2;
     }
             
@@ -186,7 +187,7 @@ def renderizar_login():
             st.markdown('</div>', unsafe_allow_html=True)
 
             if botao:
-                cargo_id, nome_usuario = LoginController.AutenticarUsuario(usuario, senha)
+                cargo_id, nome_usuario = LoginUsuarioController.AutenticarUsuario(usuario, senha)
 
                 if cargo_id:
                     entrar(cargo_id, nome_usuario)
@@ -207,10 +208,8 @@ elif st.session_state['logado']:
     nome_usuario = st.session_state['usuario_nome']
 
     if st.session_state['pagina_atual'] in ["USUARIO_TELA"]:
-        dashboard_por_cargo(cargo_id, nome_usuario)
-        st.markdown('<div class="barra-topo">', unsafe_allow_html=True)
-        st.markdown(f'<p id="nome-perfil">{nome_usuario}</p>', unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+        dashboard_por_cargo(cargo_id)
+        st.markdown(f'<div class="barra-topo"><p id="nome-usuario">{nome_usuario}</p></div>', unsafe_allow_html=True)
         st.markdown('<div class="barra-baixo"></div>', unsafe_allow_html=True)
 
 else:
