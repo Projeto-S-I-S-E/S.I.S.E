@@ -14,10 +14,6 @@ def dashboard_por_cargo(cargo_id):
             font-family: Arial;
         }
                 
-        html{
-            font-size: 2em;        
-        }
-                
         .stMain div[data-testid="stMainBlockContainer"]{
             height: 100%;
             display: flex;
@@ -38,10 +34,14 @@ def dashboard_por_cargo(cargo_id):
             border: none;
             letter-spacing: 0.05em;
         }
+                
+        .stButton button > div > p{
+            font-size: 2em;        
+        }
     </style>
     """, unsafe_allow_html=True)
 
     if cargo_id == 4:
 
         if st.button("Nova Solicitação +", key="novaSolicitacao"):
-            navegar_para()
+            navegar_para('SOLICITACAO_CADASTRO')

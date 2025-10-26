@@ -1,6 +1,7 @@
 import streamlit as st
 import Controllers.LoginUsuarioController as LoginUsuarioController
 import pages.CadUsuarioView as CadUsuarioView
+import pages.CadSolicitacaoView as CadSolicitacaoView
 import time
 from pages.DashboardUsuario import dashboard_por_cargo
 from utils.utils import DASHBOARDS, navegar_para
@@ -65,7 +66,7 @@ st.markdown("""
         background-color: #D9D9D9;
         color: #605252;
         border: none;
-        font-size: 4em;
+        font-size: 2em;
         letter-spacing: 0.15em;
         width: 97%;
         margin-left: 9px;
@@ -118,6 +119,7 @@ st.markdown("""
         margin-top: 0.5%;
         color: #636060;
         z-index: 2;
+        font-size: 2em;
     }
             
     .barra-topo{
@@ -209,6 +211,10 @@ elif st.session_state['logado']:
 
     if st.session_state['pagina_atual'] in ["USUARIO_TELA"]:
         dashboard_por_cargo(cargo_id)
+        st.markdown(f'<div class="barra-topo"><p id="nome-usuario">{nome_usuario}</p></div>', unsafe_allow_html=True)
+        st.markdown('<div class="barra-baixo"></div>', unsafe_allow_html=True)
+    elif st.session_state['pagina_atual'] == "SOLICITACAO_CADASTRO":
+        CadSolicitacaoView.renderizar_cadastro()
         st.markdown(f'<div class="barra-topo"><p id="nome-usuario">{nome_usuario}</p></div>', unsafe_allow_html=True)
         st.markdown('<div class="barra-baixo"></div>', unsafe_allow_html=True)
 
