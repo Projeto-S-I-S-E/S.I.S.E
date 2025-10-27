@@ -67,12 +67,8 @@ def renderizar_pagina():
             gap: 10px;
         }
                 
-        .st-key-excluir div[data-testid="stButton"] button{
-            background-color: #6D0404;
-        }
-        
-        .st-key-editar div[data-testid="stButton"] button{
-            background-color: #2A475D;
+        .stVerticalBlock div[data-testid="stHorizontalBlock"]{
+            margin-top: -75px;        
         }
                 
         .barra-perfil{
@@ -202,12 +198,16 @@ def renderizar_pagina():
             st.markdown(f'<span class="lista-titulo">{regional.nome}</span>', unsafe_allow_html=True)
 
         with col_editar:
-            if st.button("✎", key=f"editar"):
+            botao_editar_key = f"editar-{regional.idRegional}"
+
+            if st.button("✎", key=botao_editar_key):
                 st.session_state['regional_id_editar'] = regional.idRegional
                 navegar_para('REGIONAL_CADASTRO') 
 
         with col_excluir:
-            if st.button("✖", key=f"excluir"):
+            botao_excluir_key = f"excluir-{regional.idRegional}"
+
+            if st.button("✖", key=botao_excluir_key, type="primary"):
                 RegionalController.Inativar(regional.idRegional)
                 st.rerun()
 

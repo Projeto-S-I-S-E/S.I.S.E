@@ -66,13 +66,9 @@ def renderizar_pagina():
             display: flex;
             gap: 10px;
         }
-
-        .st-key-excluir div[data-testid="stButton"] button{
-            background-color: #6D0404;
-        }
-        
-        .st-key-editar div[data-testid="stButton"] button{
-            background-color: #2A475D;
+                
+        .stVerticalBlock div[data-testid="stHorizontalBlock"]{
+            margin-top: -75px;        
         }
                 
         .barra-perfil{
@@ -202,12 +198,16 @@ def renderizar_pagina():
             st.markdown(f'<span class="lista-titulo">{plantonista.nome}</span>', unsafe_allow_html=True)
 
         with col_editar:
-            if st.button("✎", key=f"editar"):
+            botao_editar_key = f"editar-{plantonista.idPlantonista}"
+
+            if st.button("✎", key=botao_editar_key):
                 st.session_state['plantonista_id_editar'] = plantonista.idPlantonista
                 navegar_para('PLANTONISTA_CADASTRO') 
 
         with col_excluir:
-            if st.button("✖", key=f"excluir"):
+            botao_excluir_key = f"excluir-{plantonista.idPlantonista}"
+
+            if st.button("✖", key=botao_excluir_key, type="primary"):
                 PlantonistaController.Inativar(plantonista.idPlantonista)
                 st.rerun()
 
