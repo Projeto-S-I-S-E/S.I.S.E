@@ -59,6 +59,7 @@ def renderizar_cadastro():
             position: fixed;
             top: 8%;
             left: 4%;
+            width: 210px;
             z-index: 1000;
             background-color: #446A8A;
             color: white;

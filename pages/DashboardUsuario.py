@@ -21,8 +21,10 @@ def dashboard_por_cargo(cargo_id):
             justify-content: center;
         }
                 
-        .stMainBlockContainer div[data-testid="stVerticalBlockBorderWrapper"]{
+        .stMainBlockContainer div[data-testid="stVerticalBlock"]{
             width: 70%;
+            display: flex;
+            align-items: center;
         }
                 
         .stButton button{

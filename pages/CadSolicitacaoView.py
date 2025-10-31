@@ -1,5 +1,6 @@
 import streamlit as st
 from utils.utils import navegar_para, rota_cargo_dashboard
+from streamlit_geolocation import streamlit_geolocation
 
 def renderizar_cadastro():
     
@@ -58,6 +59,7 @@ def renderizar_cadastro():
             left: 0;
             margin-top: 12%;
             margin-left: 5%;
+            width: 280px;
             height: 50px;
             z-index: 10;
             background-color: #446A8A;
@@ -99,6 +101,8 @@ def renderizar_cadastro():
     if st.button("← Voltar para Tela Inicial", key="botaoVoltar"):
         if rota_dashboard:
             navegar_para(rota_dashboard)
+
+    localizacao = streamlit_geolocation()
 
     with st.form(key="cadastrar-solicitacao"):
 
