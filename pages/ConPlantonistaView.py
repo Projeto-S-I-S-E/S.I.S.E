@@ -102,6 +102,7 @@ def renderizar_pagina():
             left: 0;
             margin-top: 2%;
             margin-left: 2%;
+            width: 270px;
             height: 40px;
             z-index: 10;
             background-color: #446A8A;
@@ -139,6 +140,7 @@ def renderizar_pagina():
             margin-right: 5%;
             background-color: #446A8A;
             color: white;
+            width: 200px;
             height: 40px;
             border-radius: 5px;
             border: none;

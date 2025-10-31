@@ -73,13 +73,12 @@ def renderizar_cadastro():
             position: fixed;
             top: 2%;
             left: 2%;
+            width: 210px;
             z-index: 1000;
             background-color: #446A8A;
             color: white;
             padding: 10px;
             border-radius: 5px;
-            border: none;
-            letter-spacing: 0.15em;
             border: none;
             letter-spacing: 0.15em;
         }
