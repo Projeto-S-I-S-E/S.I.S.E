@@ -22,7 +22,7 @@ def dashboard_por_cargo(cargo_id):
         }
                 
         .stMainBlockContainer div[data-testid="stVerticalBlock"]{
-            width: 70%;
+            width: 100%;
             display: flex;
             align-items: center;
         }
