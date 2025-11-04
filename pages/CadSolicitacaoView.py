@@ -18,10 +18,10 @@ def buscar_endereco_reverso(latitude, longitude):
         else:
             return None
     except (GeocoderTimedOut, GeocoderServiceError) as e:
-        st.error(f"Erro ao buscar endereço (Geopy): {e}")
+        print(f"DEBUG ERRO: Erro ao buscar endereço (Geopy): {e}") 
         return None
     except Exception as e:
-        st.error(f"Erro inesperado: {e}")
+        print(f"DEBUG ERRO: Erro inesperado: {e}")
         return None
     
 def iniciar_state_localizacao():
@@ -37,12 +37,16 @@ def iniciar_state_localizacao():
         st.session_state['endereco_completo'] = ""
     if 'solicitacao_pendente' not in st.session_state:
         st.session_state['solicitacao_pendente'] = ""
+    if 'dados_localizacao_recebidos' not in st.session_state:
+        st.session_state['dados_localizacao_recebidos'] = {}
+    if 'tentativas_geolocalizacao' not in st.session_state:
+        st.session_state['tentativas_geolocalizacao'] = 0
 
 def renderizar_cadastro():
     iniciar_state_localizacao()
 
-    dados_localizacao = None
-
+    print(f"\n--- INÍCIO RERUN --- Status: {st.session_state['status_localizacao']}, Requisicao: {st.session_state['requisicao_geolocalizacao']}, Tentativas: {st.session_state['tentativas_geolocalizacao']}")
+    
     textarea_desativado = (st.session_state['requisicao_geolocalizacao'] and st.session_state['status_localizacao'] != 'Obtido')
     
     st.markdown("""
@@ -186,6 +190,29 @@ def renderizar_cadastro():
         if rota_dashboard:
             navegar_para(rota_dashboard)
 
+    if st.session_state['status_localizacao'] == 'Processando':
+        print(f"DEBUG: Entrou no Estágio 'Processando'. Coordenadas: {st.session_state['latitude']}, {st.session_state['longitude']}")
+
+        latitude = st.session_state['latitude']
+        longitude = st.session_state['longitude']
+
+        st.session_state['tentativas_geolocalizacao'] = 0 
+
+        with st.spinner('Convertendo coordenadas em endereço. Por favor, aguarde...'):
+            endereco = buscar_endereco_reverso(latitude, longitude)
+
+        print(f"DEBUG: Busca de endereço concluída. Endereço: {endereco}")
+
+        if endereco:
+            st.session_state['endereco_completo'] = endereco
+            st.session_state['status_localizacao'] = 'Obtido'
+        else:
+            st.session_state['endereco_completo'] = f"Coordenadas: Lat={latitude:.5f}, Lon={longitude:.5f} (Endereço não encontrado)"
+            st.session_state['status_localizacao'] = 'Obtido'
+        
+        print("DEBUG: Transicionando para 'Obtido'. Chamando st.rerun()")
+        st.rerun()
+
     if st.session_state['status_localizacao'] == 'Obtido':
         st.success("Localização Obtida!")
         st.subheader("Endereço da Ocorrência:")
@@ -201,12 +228,13 @@ def renderizar_cadastro():
     if st.session_state['status_localizacao'] == 'Obtido':
         botao_mensagem = "Confirmar Envio"
     elif st.session_state['status_localizacao'] == 'Erro':
-        botao_desativado = True
-        botao_mensagem = "Verificar Permissões"
+        botao_desativado = False
+        botao_mensagem = "Tentar Novamente (Localização)"
 
-    if st.session_state['requisicao_geolocalizacao'] and st.session_state['status_localizacao'] == 'Aguardando':
-        botao_desativado = True
-        botao_mensagem = "Aguardando Localização..."
+    if st.session_state['status_localizacao'] in ['Aguardando', 'Processando']:
+        if st.session_state['requisicao_geolocalizacao']:
+            botao_desativado = True
+            botao_mensagem = "Aguardando Localização..."
 
     with st.form(key="cadastrar-solicitacao"):
 
@@ -218,12 +246,41 @@ def renderizar_cadastro():
         )
 
         if st.session_state['requisicao_geolocalizacao'] and st.session_state['status_localizacao'] == 'Aguardando':
-            with st.container(key="localizacao"):
+            print("DEBUG: Renderizando o componente de geolocalização.")
+
+            with st.container():
                 dados_localizacao = streamlit_geolocation()
 
-                if dados_localizacao is None:
-                    st.empty()
-                    pass
+                if dados_localizacao and dados_localizacao != st.session_state['dados_localizacao_recebidos']:
+                    print(f"DEBUG: Componente retornou dados. Valor: {dados_localizacao}")
+
+                    st.session_state['dados_localizacao_recebidos'] = dados_localizacao
+
+                    latitude = dados_localizacao.get("latitude")
+                    longitude = dados_localizacao.get("longitude")
+
+                    if latitude is not None and longitude is not None:
+                        st.session_state['latitude'] = latitude
+                        st.session_state['longitude'] = longitude
+                        st.session_state['status_localizacao'] = 'Processando'
+                        print("DEBUG: Latitude/Longitude OK. Transicionando para 'Processando'. Chamando st.rerun()")
+                        st.rerun()
+
+                    elif dados_localizacao.get("error_message"):
+                        st.session_state['status_localizacao'] = 'Erro'
+                        print(f"DEBUG: Erro na geolocalização do navegador: {dados_localizacao.get('error_message')}. Transicionando para 'Erro'.")
+                        st.rerun()
+
+                    else:
+                        st.session_state['tentativas_geolocalizacao'] += 1
+                        print(f"DEBUG: Coordenadas Nulas e sem erro. Tentativa {st.session_state['tentativas_geolocalizacao']} / 5.")
+                        
+                        if st.session_state['tentativas_geolocalizacao'] >= 5:
+                            st.session_state['status_localizacao'] = 'Erro'
+                            print("DEBUG: Limite de 5 tentativas atingido. Transicionando para 'Erro'.")
+
+                        st.session_state['dados_localizacao_recebidos'] = {}
+                        st.rerun()
 
         botao = st.form_submit_button(botao_mensagem, use_container_width=True, disabled=botao_desativado)
 
@@ -231,9 +288,16 @@ def renderizar_cadastro():
             if not solicitacao.strip():
                 st.warning("A descrição da ocorrência não pode estar vazia.")
             elif st.session_state['status_localizacao'] != 'Obtido':
+
+                if st.session_state['status_localizacao'] == 'Erro':
+                    print("DEBUG: Clicou em 'Tentar Novamente' após erro.")
+                else:
+                    print("DEBUG: Primeiro clique, transicionando para 'Aguardando' (Rerun 1).")
+
                 st.session_state['requisicao_geolocalizacao'] = True
                 st.session_state['status_localizacao'] = 'Aguardando'
                 st.session_state['solicitacao_pendente'] = solicitacao
+                st.session_state['tentativas_geolocalizacao'] = 0
 
                 st.rerun()
             elif st.session_state['status_localizacao'] == 'Obtido':
@@ -245,26 +309,3 @@ def renderizar_cadastro():
                 }
 
                 st.json(dados_finais)
-
-    if dados_localizacao and st.session_state['status_localizacao'] == 'Aguardando' and st.session_state['requisicao_geolocalizacao']:
-        latitude = dados_localizacao.get("latitude")
-        longitude = dados_localizacao.get("longitude")
-
-        if latitude is not None and longitude is not None:
-            st.session_state['latitude'] = latitude
-            st.session_state['longitude'] = longitude
-            st.session_state['status_localizacao'] = 'Obtido'
-
-            with st.spinner('Convertendo coordenadas em endereço...'):
-                endereco = buscar_endereco_reverso(latitude, longitude)
-
-            if endereco:
-                st.session_state['endereco_completo'] = endereco
-            else:
-                st.session_state['endereco_completo'] = f"Coordenadas: Lat={latitude:.5f}, Lon={longitude:.5f} (Endereço não encontrado)"
-            
-            st.rerun()
-
-        elif dados_localizacao.get("error_message"):
-            st.session_state['status_localizacao'] = 'Erro'
-            st.rerun()
