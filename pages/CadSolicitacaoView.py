@@ -219,16 +219,11 @@ def renderizar_cadastro():
 
         if st.session_state['requisicao_geolocalizacao'] and st.session_state['status_localizacao'] == 'Aguardando':
             with st.container(key="localizacao"):
-                st.markdown(
-                    """
-                    <div style='text-align: center; margin-bottom: 10px; font-size: 1.2em; color: #f8d7da; background-color: #721c24; border-radius: 5px; padding: 10px;'>
-                        Clique no botão verde abaixo para capturar sua localização.
-                    </div>
-                    """,
-                    unsafe_allow_html=True
-                )
-
                 dados_localizacao = streamlit_geolocation()
+
+                if dados_localizacao is None:
+                    st.empty()
+                    pass
 
         botao = st.form_submit_button(botao_mensagem, use_container_width=True, disabled=botao_desativado)
 
@@ -260,7 +255,8 @@ def renderizar_cadastro():
             st.session_state['longitude'] = longitude
             st.session_state['status_localizacao'] = 'Obtido'
 
-            endereco = buscar_endereco_reverso(latitude, longitude)
+            with st.spinner('Convertendo coordenadas em endereço...'):
+                endereco = buscar_endereco_reverso(latitude, longitude)
 
             if endereco:
                 st.session_state['endereco_completo'] = endereco
