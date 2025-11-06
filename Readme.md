@@ -14,5 +14,5 @@ Projeto de registro de ocorrências relacionadas aos serviços de emergência.
 - StreamLit
 - pyodbc
 - bcrypt
-- streamlit-geolocation
+- streamlit_js_eval
 - geopy
