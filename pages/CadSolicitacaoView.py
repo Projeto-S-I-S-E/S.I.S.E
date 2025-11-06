@@ -1,9 +1,8 @@
 import streamlit as st
-from streamlit_geolocation import streamlit_geolocation
+from streamlit_js_eval import get_geolocation
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut, GeocoderServiceError
 from utils.utils import navegar_para, rota_cargo_dashboard
-import json
 
 geolocalizador = Nominatim(user_agent="projeto_sise")
 
@@ -18,10 +17,10 @@ def buscar_endereco_reverso(latitude, longitude):
         else:
             return None
     except (GeocoderTimedOut, GeocoderServiceError) as e:
-        print(f"DEBUG ERRO: Erro ao buscar endereço (Geopy): {e}") 
+        st.error(f"Erro ao buscar endereço (Geopy): {e}") 
         return None
     except Exception as e:
-        print(f"DEBUG ERRO: Erro inesperado: {e}")
+        st.error(f"Erro inesperado: {e}")
         return None
     
 def iniciar_state_localizacao():
@@ -37,17 +36,11 @@ def iniciar_state_localizacao():
         st.session_state['endereco_completo'] = ""
     if 'solicitacao_pendente' not in st.session_state:
         st.session_state['solicitacao_pendente'] = ""
-    if 'dados_localizacao_recebidos' not in st.session_state:
-        st.session_state['dados_localizacao_recebidos'] = {}
-    if 'tentativas_geolocalizacao' not in st.session_state:
-        st.session_state['tentativas_geolocalizacao'] = 0
 
 def renderizar_cadastro():
     iniciar_state_localizacao()
 
-    print(f"\n--- INÍCIO RERUN --- Status: {st.session_state['status_localizacao']}, Requisicao: {st.session_state['requisicao_geolocalizacao']}, Tentativas: {st.session_state['tentativas_geolocalizacao']}")
-    
-    textarea_desativado = (st.session_state['requisicao_geolocalizacao'] and st.session_state['status_localizacao'] != 'Obtido')
+    dados_localizacao = None
     
     st.markdown("""
     <style>
@@ -82,8 +75,19 @@ def renderizar_cadastro():
             font-size: 2em;        
         }
                 
+        .stHeading{
+            width: 85%;
+            margin-top: 60px;
+            margin-left: 40px;
+        }
+                
         .stTextArea label[data-testid="stWidgetLabel"] div > p{
             font-size: 2em;        
+        }
+                
+        .stTextArea label[data-testid="stWidgetLabel"] div > p:disabled{
+            color: white;
+            opacity: 1;
         }
                 
         .stTextArea div[data-baseweb="textarea"] div{
@@ -103,7 +107,15 @@ def renderizar_cadastro():
             opacity: 0.5;
         }
                 
+        .stTextArea div[data-baseweb="textarea"] div > textarea:disabled{
+            -webkit-text-fill-color: black;
+            color: black;
+            opacity: 0.5;
+        }
+                
         .stText {
+            width: 85%;
+            margin-left: 40px;
             margin-bottom: 20px;
             padding: 10px;
             background-color: #446A8A;
@@ -156,31 +168,6 @@ def renderizar_cadastro():
             margin-left: 0;
             letter-spacing: 0.15em;
         }
-                
-        div[class="st-key-loc"] > div:first-child{
-            background-color: transparent !important;
-        }
-                
-        div[class="st-key-loc"] > iframe{
-            height: 50px !important;
-            width: 100% !important;
-            border: none !important;
-            margin-top: 10px;
-            margin-bottom: 20px;
-        }
-                
-        div[class="st-key-loc"] iframe body button{
-            background-color: #28a745 !important;
-            color: white !important;
-            border-radius: 8px !important;
-            padding: 10px 20px !important;
-            font-size: 1.2em !important;
-            font-weight: bold !important;
-            border: none !important;
-            cursor: pointer;
-            width: 100%;
-            height: 100%;
-        }
     </style>
     """, unsafe_allow_html=True)
 
@@ -190,51 +177,30 @@ def renderizar_cadastro():
         if rota_dashboard:
             navegar_para(rota_dashboard)
 
-    if st.session_state['status_localizacao'] == 'Processando':
-        print(f"DEBUG: Entrou no Estágio 'Processando'. Coordenadas: {st.session_state['latitude']}, {st.session_state['longitude']}")
-
-        latitude = st.session_state['latitude']
-        longitude = st.session_state['longitude']
-
-        st.session_state['tentativas_geolocalizacao'] = 0 
-
-        with st.spinner('Convertendo coordenadas em endereço. Por favor, aguarde...'):
-            endereco = buscar_endereco_reverso(latitude, longitude)
-
-        print(f"DEBUG: Busca de endereço concluída. Endereço: {endereco}")
-
-        if endereco:
-            st.session_state['endereco_completo'] = endereco
-            st.session_state['status_localizacao'] = 'Obtido'
-        else:
-            st.session_state['endereco_completo'] = f"Coordenadas: Lat={latitude:.5f}, Lon={longitude:.5f} (Endereço não encontrado)"
-            st.session_state['status_localizacao'] = 'Obtido'
-        
-        print("DEBUG: Transicionando para 'Obtido'. Chamando st.rerun()")
-        st.rerun()
-
     if st.session_state['status_localizacao'] == 'Obtido':
-        st.success("Localização Obtida!")
         st.subheader("Endereço da Ocorrência:")
         st.text(st.session_state['endereco_completo'])
     elif st.session_state['status_localizacao'] == 'Erro':
         st.error("Falha ao obter localização. Verifique as permissões do seu navegador e clique em 'Tentar Novamente'.")
     elif st.session_state['requisicao_geolocalizacao']:
-        st.info("Passo 2 de 2: Clique no botão abaixo para permitir a captura da sua localização.")
+        st.info("Aguardando permissão de localização do navegador. Por favor, aceite a solicitação que apareceu na tela.")
 
+    textarea_desativado = False
     botao_desativado = False
     botao_mensagem = "Enviar Solicitação"
 
     if st.session_state['status_localizacao'] == 'Obtido':
+        textarea_desativado = True
         botao_mensagem = "Confirmar Envio"
     elif st.session_state['status_localizacao'] == 'Erro':
+        textarea_desativado = True
         botao_desativado = False
-        botao_mensagem = "Tentar Novamente (Localização)"
+        botao_mensagem = "Tentar Novamente"
 
-    if st.session_state['status_localizacao'] in ['Aguardando', 'Processando']:
-        if st.session_state['requisicao_geolocalizacao']:
-            botao_desativado = True
-            botao_mensagem = "Aguardando Localização..."
+    if st.session_state['requisicao_geolocalizacao'] and st.session_state['status_localizacao'] == 'Aguardando':
+        textarea_desativado = True
+        botao_desativado = True
+        botao_mensagem = "Aguardando Localização..."
 
     with st.form(key="cadastrar-solicitacao"):
 
@@ -245,61 +211,19 @@ def renderizar_cadastro():
             disabled=textarea_desativado
         )
 
-        if st.session_state['requisicao_geolocalizacao'] and st.session_state['status_localizacao'] == 'Aguardando':
-            print("DEBUG: Renderizando o componente de geolocalização.")
-
-            with st.container():
-                dados_localizacao = streamlit_geolocation()
-
-                if dados_localizacao and dados_localizacao != st.session_state['dados_localizacao_recebidos']:
-                    print(f"DEBUG: Componente retornou dados. Valor: {dados_localizacao}")
-
-                    st.session_state['dados_localizacao_recebidos'] = dados_localizacao
-
-                    latitude = dados_localizacao.get("latitude")
-                    longitude = dados_localizacao.get("longitude")
-
-                    if latitude is not None and longitude is not None:
-                        st.session_state['latitude'] = latitude
-                        st.session_state['longitude'] = longitude
-                        st.session_state['status_localizacao'] = 'Processando'
-                        print("DEBUG: Latitude/Longitude OK. Transicionando para 'Processando'. Chamando st.rerun()")
-                        st.rerun()
-
-                    elif dados_localizacao.get("error_message"):
-                        st.session_state['status_localizacao'] = 'Erro'
-                        print(f"DEBUG: Erro na geolocalização do navegador: {dados_localizacao.get('error_message')}. Transicionando para 'Erro'.")
-                        st.rerun()
-
-                    else:
-                        st.session_state['tentativas_geolocalizacao'] += 1
-                        print(f"DEBUG: Coordenadas Nulas e sem erro. Tentativa {st.session_state['tentativas_geolocalizacao']} / 5.")
-                        
-                        if st.session_state['tentativas_geolocalizacao'] >= 5:
-                            st.session_state['status_localizacao'] = 'Erro'
-                            print("DEBUG: Limite de 5 tentativas atingido. Transicionando para 'Erro'.")
-
-                        st.session_state['dados_localizacao_recebidos'] = {}
-                        st.rerun()
-
         botao = st.form_submit_button(botao_mensagem, use_container_width=True, disabled=botao_desativado)
 
         if botao:
             if not solicitacao.strip():
                 st.warning("A descrição da ocorrência não pode estar vazia.")
+
             elif st.session_state['status_localizacao'] != 'Obtido':
-
-                if st.session_state['status_localizacao'] == 'Erro':
-                    print("DEBUG: Clicou em 'Tentar Novamente' após erro.")
-                else:
-                    print("DEBUG: Primeiro clique, transicionando para 'Aguardando' (Rerun 1).")
-
                 st.session_state['requisicao_geolocalizacao'] = True
                 st.session_state['status_localizacao'] = 'Aguardando'
                 st.session_state['solicitacao_pendente'] = solicitacao
-                st.session_state['tentativas_geolocalizacao'] = 0
 
                 st.rerun()
+
             elif st.session_state['status_localizacao'] == 'Obtido':
                 dados_finais = {
                     "descricao": solicitacao,
@@ -309,3 +233,33 @@ def renderizar_cadastro():
                 }
 
                 st.json(dados_finais)
+
+    if st.session_state['requisicao_geolocalizacao'] and st.session_state['status_localizacao'] == 'Aguardando':
+        dados_localizacao = get_geolocation()
+        if dados_localizacao and 'coords' in dados_localizacao:
+            dados_localizacao = dados_localizacao['coords']
+        else:
+            dados_localizacao = None
+
+    if dados_localizacao and st.session_state['status_localizacao'] == 'Aguardando' and st.session_state['requisicao_geolocalizacao']:
+        latitude = dados_localizacao.get("latitude")
+        longitude = dados_localizacao.get("longitude")
+
+        if latitude is not None and longitude is not None:
+            st.session_state['latitude'] = latitude
+            st.session_state['longitude'] = longitude
+            st.session_state['status_localizacao'] = 'Obtido'
+
+            with st.spinner('Convertendo coordenadas em endereço...'):
+                endereco = buscar_endereco_reverso(latitude, longitude)
+
+            if endereco:
+                st.session_state['endereco_completo'] = endereco
+            else:
+                st.session_state['endereco_completo'] = f"Coordenadas: Lat={latitude:.5f}, Lon={longitude:.5f} (Endereço não encontrado)"
+            
+            st.rerun()
+
+        elif dados_localizacao.get("error_message"):
+            st.session_state['status_localizacao'] = 'Erro'
+            st.rerun()
