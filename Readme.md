@@ -16,3 +16,4 @@ Projeto de registro de ocorrências relacionadas aos serviços de emergência.
 - bcrypt
 - streamlit_js_eval
 - geopy
+- openai
