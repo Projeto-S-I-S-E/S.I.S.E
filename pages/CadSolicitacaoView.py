@@ -75,6 +75,10 @@ def renderizar_cadastro():
             font-size: 2em;        
         }
                 
+        #endereco-da-ocorrencia{
+            color: white;        
+        }
+                
         .stHeading{
             width: 85%;
             margin-top: 60px;
@@ -119,13 +123,16 @@ def renderizar_cadastro():
             margin-bottom: 20px;
             padding: 10px;
             background-color: #446A8A;
-            color: white;
             border-radius: 5px;
             font-size: 1.2em;
         }
                 
         .stText div[data-testid="stText"]{
             padding: 5px;
+        }
+                
+        .stText > div{
+            color: white;        
         }
                 
         .st-key-botaoVoltar div[data-testid="stButton"] button{
