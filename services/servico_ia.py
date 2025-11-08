@@ -77,8 +77,14 @@ def processar_solicitacao_ia(endereco_completo: str, descricao_usuario: str) -> 
         
     except (APIError, APIConnectionError) as e:
         print(f"DEBUG ERRO API: Falha na comunicação com a API da IA: {e}")
+        erro_msg = str(e)
+        if 'insufficient_quota' in erro_msg or '429' in erro_msg:
+            feedback_erro = "CRÍTICO: A chave da API de Inteligência Artificial excedeu o limite de uso. Contate o administrador."
+        else:
+            feedback_erro = f"Falha na API ({e.__class__.__name__}). Tente novamente."
+            
         return {
-            "erro": f"Falha na API ({e.__class__.__name__}). Tente novamente.",
+            "erro": feedback_erro,
             "endereco_consolidado": endereco_completo,
             "gravidade": "Indefinida",
             "servicos_acessados": [],

@@ -1,8 +1,10 @@
 import streamlit as st
+import Controllers.SolicitacaoController as SolicitacaoController
 from streamlit_js_eval import get_geolocation
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut, GeocoderServiceError
 from utils.utils import navegar_para, rota_cargo_dashboard
+from services.servico_ia import processar_solicitacao_ia
 
 geolocalizador = Nominatim(user_agent="projeto_sise")
 
@@ -36,6 +38,8 @@ def iniciar_state_localizacao():
         st.session_state['endereco_completo'] = ""
     if 'solicitacao_pendente' not in st.session_state:
         st.session_state['solicitacao_pendente'] = ""
+    if 'dados_ia' not in st.session_state:
+        st.session_state['dados_ia'] = None
 
 def renderizar_cadastro():
     iniciar_state_localizacao()
@@ -169,7 +173,7 @@ def renderizar_cadastro():
             border-radius: 5px;
             border: none;
             font-size: 2em;
-            width: 42%;
+            width: 42.5%;
             height: 50px;
             margin-top: 5%;
             margin-left: 0;
@@ -181,6 +185,15 @@ def renderizar_cadastro():
     rota_dashboard = rota_cargo_dashboard()
 
     if st.button("← Voltar para Tela Inicial", key="botaoVoltar"):
+
+        st.session_state['status_localizacao'] = 'Aguardando'
+        st.session_state['requisicao_geolocalizacao'] = False
+        st.session_state['latitude'] = None
+        st.session_state['longitude'] = None
+        st.session_state['endereco_completo'] = ""
+        st.session_state['solicitacao_pendente'] = ""
+        st.session_state['dados_ia'] = None
+
         if rota_dashboard:
             navegar_para(rota_dashboard)
 
@@ -189,6 +202,8 @@ def renderizar_cadastro():
         st.text(st.session_state['endereco_completo'])
     elif st.session_state['status_localizacao'] == 'Erro':
         st.error("Falha ao obter localização. Verifique as permissões do seu navegador e clique em 'Tentar Novamente'.")
+    elif st.session_state['status_localizacao'] == 'Erro Persistência':
+        st.error("Ocorreu um erro ao registrar sua solicitação no sistema. Clique em 'Tentar Novamente' para reenviar.")
     elif st.session_state['requisicao_geolocalizacao']:
         st.info("Aguardando permissão de localização do navegador. Por favor, aceite a solicitação que apareceu na tela.")
 
@@ -197,17 +212,27 @@ def renderizar_cadastro():
     botao_mensagem = "Enviar Solicitação"
 
     if st.session_state['status_localizacao'] == 'Obtido':
-        textarea_desativado = True
-        botao_mensagem = "Confirmar Envio"
-    elif st.session_state['status_localizacao'] == 'Erro':
-        textarea_desativado = True
+        textarea_desativado = False
         botao_desativado = False
+        botao_mensagem = "Confirmar Envio"
+    elif st.session_state['status_localizacao'] == 'IA Processando':
+        textarea_desativado = True
+        botao_desativado = True
+        botao_mensagem = "Processando..."
+    elif st.session_state['status_localizacao'] == 'Erro' or st.session_state['status_localizacao'] == 'Erro Persistência':
+        textarea_desativado = True
         botao_mensagem = "Tentar Novamente"
 
     if st.session_state['requisicao_geolocalizacao'] and st.session_state['status_localizacao'] == 'Aguardando':
         textarea_desativado = True
         botao_desativado = True
         botao_mensagem = "Aguardando Localização..."
+
+    if st.session_state['status_localizacao'] == 'IA Concluída':
+        textarea_desativado = True
+        botao_desativado = True
+        botao_mensagem = "Solicitação Enviada"
+        st.success("Sua solicitação foi registrada com sucesso!")
 
     with st.form(key="cadastrar-solicitacao"):
 
@@ -220,7 +245,7 @@ def renderizar_cadastro():
 
         botao = st.form_submit_button(botao_mensagem, use_container_width=True, disabled=botao_desativado)
 
-        if botao:
+        if botao and st.session_state['status_localizacao'] != 'IA Concluída':
             if not solicitacao.strip():
                 st.warning("A descrição da ocorrência não pode estar vazia.")
 
@@ -232,14 +257,45 @@ def renderizar_cadastro():
                 st.rerun()
 
             elif st.session_state['status_localizacao'] == 'Obtido':
-                dados_finais = {
-                    "descricao": solicitacao,
-                    "lat": st.session_state['latitude'],
-                    "lon": st.session_state['longitude'],
-                    "endereco_final": st.session_state['endereco_completo']
-                }
+                st.session_state['solicitacao_pendente'] = solicitacao
+                st.session_state['status_localizacao'] = 'IA Processando'
+                st.rerun()
 
-                st.json(dados_finais)
+    if st.session_state['status_localizacao'] == 'IA Processando':
+        st.info("Analisando a ocorrência...")
+
+        with st.spinner("Aguarde a análise da inteligência artificial..."):
+            dados_ia_processados = processar_solicitacao_ia(
+                endereco_completo=st.session_state['endereco_completo'],
+                descricao_usuario=st.session_state['solicitacao_pendente']
+            )
+
+        if 'erro' in dados_ia_processados:
+            st.error(f"Erro no Processamento da IA: {dados_ia_processados['erro']}")
+            st.session_state['status_localizacao'] = 'Erro'
+            st.rerun()
+        else:
+            st.session_state['dados_ia'] = dados_ia_processados
+            id_usuario = st.session_state['usuario_id']
+
+            try:
+                id_solicitacao_criada = SolicitacaoController.InserirSolicitacao(
+                    id_usuario=id_usuario,
+                    dados_ia=st.session_state['dados_ia']
+                )
+
+                if id_solicitacao_criada:
+                    st.success(f"Solicitação {id_solicitacao_criada} registrada! Plantonista notificado.")
+                    st.session_state['status_localizacao'] = 'IA Concluída'
+                else:
+                    st.error("FATAL: Falha ao inserir dados no banco. Tente novamente.")
+                    st.session_state['status_localizacao'] = 'Erro Persistência'
+
+            except Exception as e:
+                st.error(f"FATAL: Erro durante a persistência: {e}")
+                st.session_state['status_localizacao'] = 'Erro Persistência'
+
+            st.rerun()
 
     if st.session_state['requisicao_geolocalizacao'] and st.session_state['status_localizacao'] == 'Aguardando':
         dados_localizacao = get_geolocation()
@@ -256,6 +312,8 @@ def renderizar_cadastro():
             st.session_state['latitude'] = latitude
             st.session_state['longitude'] = longitude
             st.session_state['status_localizacao'] = 'Obtido'
+
+            st.session_state['requisicao_geolocalizacao'] = False
 
             with st.spinner('Convertendo coordenadas em endereço...'):
                 endereco = buscar_endereco_reverso(latitude, longitude)

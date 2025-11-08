@@ -152,6 +152,8 @@ st.markdown("""
 
 if 'logado' not in st.session_state:
     st.session_state['logado'] = False
+if 'usuario_id' not in st.session_state:
+    st.session_state['usuario_id'] = None
 if 'usuario_cargo_id' not in st.session_state:
     st.session_state['usuario_cargo_id'] = None
 if 'usuario_nome' not in st.session_state:
@@ -159,8 +161,9 @@ if 'usuario_nome' not in st.session_state:
 if 'pagina_atual' not in st.session_state:
     st.session_state['pagina_atual'] = None
 
-def entrar(cargo_id, nome_usuario):
+def entrar(id_perfil, cargo_id, nome_usuario):
     st.session_state['logado'] = True
+    st.session_state['usuario_id'] = id_perfil
     st.session_state['usuario_cargo_id'] = cargo_id
     st.session_state['usuario_nome'] = nome_usuario
     st.session_state['pagina_atual'] = DASHBOARDS.get(cargo_id)
@@ -189,10 +192,10 @@ def renderizar_login():
             st.markdown('</div>', unsafe_allow_html=True)
 
             if botao:
-                cargo_id, nome_usuario = LoginUsuarioController.AutenticarUsuario(usuario, senha)
+                id_perfil, cargo_id, nome_usuario = LoginUsuarioController.AutenticarUsuario(usuario, senha)
 
-                if cargo_id:
-                    entrar(cargo_id, nome_usuario)
+                if id_perfil:
+                    entrar(id_perfil, cargo_id, nome_usuario)
                 else:
                     st.error("Nome de usuário ou senha incorretos.")
 
