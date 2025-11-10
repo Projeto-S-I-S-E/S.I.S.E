@@ -46,9 +46,17 @@ def processar_solicitacao_ia(endereco_completo: str, descricao_usuario: str) -> 
 
     contexto_sistema = f"""
     Você é um Analista de Emergências sênior. Sua tarefa é analisar o ENDEREÇO COMPLETO e a DESCRIÇÃO DO USUÁRIO.
+
     1. Consolide o endereço em um formato mais curto e direto.
-    2. Classifique a gravidade da situação. Use APENAS: 'Baixa', 'Média', 'Alta' ou 'Crítica'.
+
+    2. Classifique a gravidade da situação de acordo com o risco imediato à vida, usando APENAS uma das opções: 'Baixa', 'Média', 'Alta' ou 'Crítica'.
+    - **Baixa:** situações sem risco de morte ou ferimentos graves, como pequenos mal-estares, desmaios leves, quedas sem lesão, incêndios controlados, barulhos, brigas verbais ou pedidos de ajuda preventiva.
+    - **Média:** situações que podem se agravar, mas sem risco iminente de morte, como pessoa consciente com dor forte, princípio de incêndio, acidente leve com ferimentos moderados, ou mal-estar persistente.
+    - **Alta:** risco evidente de morte se não houver atendimento rápido, como pessoa inconsciente, sangramento intenso, incêndio ativo, afogamento ou agressão física grave.
+    - **Crítica:** risco imediato de morte ou grande número de vítimas, como parada cardiorrespiratória, desabamento, incêndio em grande proporção, múltiplos feridos, explosão ou tiroteio ativo.
+
     3. Determine os serviços de emergência primários e secundários necessários. Use APENAS: 'Bombeiro', 'SAMU' ou 'Polícia'.
+
     4. Reescreva a descrição do usuário em um texto consolidado, objetivo e profissional para o despacho de equipes.
 
     Você DEVE retornar sua resposta EXCLUSIVAMENTE como um objeto JSON que obedeça ao seguinte schema: {json.dumps(json_esperado)}.

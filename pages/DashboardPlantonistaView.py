@@ -66,10 +66,6 @@ def renderizar_solicitacoes_cards(solicitacoes):
         gravidade = sol[3]
         status_atual = sol[7]
         
-        descricao_curta = descricao_completa.split('.')[0]
-        if len(descricao_curta) > 50:
-             descricao_curta = descricao_curta[:50] + '...'
-        
         gravidade_cor_hex = STATUS_COLOR_MAP.get(gravidade, '#AAAAAA')
         status_cor_hex = STATUS_COLOR_MAP.get(status_atual, '#666666')
         status_label = status_atual.upper()
