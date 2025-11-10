@@ -22,12 +22,12 @@ def ObterSolicitacoes(id_usuario_logado):
         JOIN Usuario u ON s.idUsuario = u.idUsuario
         JOIN [Status] st ON s.idStatus = st.idStatus
         JOIN Relacao_Solicitacao_Servico rss ON s.idSolicitacao = rss.idSolicitacao
-        WHERE st.nome IN ('Aberta', 'Em Andamento')
+        WHERE st.nome IN ('Aguardando', 'Em Andamento')
         AND rss.idServico = ? 
         GROUP BY s.idSolicitacao, s.endereco_consolidado, s.descricao_consolidada, s.gravidade, s.data_abertura, u.nome, u.telefone, st.nome
         ORDER BY 
             CASE 
-                WHEN st.nome = 'Aberta' THEN 1
+                WHEN st.nome = 'Aguardando' THEN 1
                 WHEN st.nome = 'Em Andamento' THEN 2
                 ELSE 3
             END,

@@ -1,6 +1,6 @@
 import pyodbc
 
-server = 'SE-CGS-520070' #Filipe: DESKTOP-A3IBJIT - Filipe Estágio: SE-CGS-520070 - Bruno: LAPTOP-I3KBFE51
+server = 'DESKTOP-A3IBJIT' #Filipe: DESKTOP-A3IBJIT - Filipe Estágio: SE-CGS-520070 - Bruno: LAPTOP-I3KBFE51
 database = 'ProjetoSISE'
 username = 'sa'
 password = 'ProjetoSISE'

@@ -13,6 +13,7 @@ def renderizar_dashboard_plantonista():
                 
         .stColumn div[data-testid="stVerticalBlockBorderWrapper"] > div > div[data-testid="stVerticalBlockBorderWrapper"]{
             background-color: #F0F0F0 !important;
+            color: black;
         }
                 
         .stButton button{
@@ -34,12 +35,12 @@ def renderizar_dashboard_plantonista():
 def renderizar_solicitacoes_cards(solicitacoes):
     
     STATUS_COLOR_MAP = {
-        'Aberta': '#DC143C',
-        'Em Andamento': '#FFA500',
+        'Aguardando': "#FFBE46",
+        'Em Andamento': "#29948F",
         'Concluída': '#32CD32',
         'Crítica': "#46073B",
         'Alta': '#DC143C',
-        'Média': '#FFA500',
+        'Média': "#FF9100",
         'Baixa': '#32CD32'
     }
 
@@ -104,7 +105,7 @@ def renderizar_solicitacoes_cards(solicitacoes):
                     overflow: hidden;
                     height: 3.9em;
                 ">{endereco}</strong>
-                <hr style="margin: 5px 0;">
+                <hr style="margin: 15px 0; background-color: black;">
                 <p style="
                     margin: 0; 
                     font-size: 0.9em;
@@ -125,6 +126,7 @@ def renderizar_solicitacoes_cards(solicitacoes):
                     color: white; 
                     padding: 5px; 
                     text-align: center;
+                    font-weight: bold;
                     font-size: 0.9em;
                     margin: -16px;
                     margin-top: 10px;
@@ -134,7 +136,7 @@ def renderizar_solicitacoes_cards(solicitacoes):
                 </div>
                 """, unsafe_allow_html=True)
             
-            if status_atual == 'Aberta':
+            if status_atual == 'Aguardando':
                 botao_label = "Assumir (Em Andamento)"
                 novo_status = 2
                 botao_key = f"btn_ass_{id_solicitacao}"
