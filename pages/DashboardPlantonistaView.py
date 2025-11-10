@@ -10,6 +10,10 @@ def renderizar_dashboard_plantonista():
             margin-left: 200px;
             max-width: 1520px;        
         }
+                
+        .stColumn div[data-testid="stVerticalBlockBorderWrapper"] > div > div[data-testid="stVerticalBlockBorderWrapper"]{
+            background-color: #F0F0F0 !important;
+        }
     </style>
     """, unsafe_allow_html=True)
 
@@ -67,7 +71,7 @@ def renderizar_solicitacoes_cards(solicitacoes):
         col = cols[i % 5]
 
         with col:
-            with st.container(border=True):
+            with st.container(border=True): 
                 
                 st.markdown(f"""
                 <div style="
@@ -77,7 +81,7 @@ def renderizar_solicitacoes_cards(solicitacoes):
                     text-align: center;
                     font-weight: bold;
                     font-size: 1.1em;
-                    margin: -16px; /* Ajusta margem para parecer parte do container */
+                    margin: -16px;
                     margin-bottom: 10px;
                     border-radius: 9px 9px 0 0;
                     ">
@@ -86,7 +90,15 @@ def renderizar_solicitacoes_cards(solicitacoes):
                 """, unsafe_allow_html=True)
                 
                 st.markdown(f"""
-                <strong style="font-size: 1.1em;">{endereco}</strong><br>
+                <strong style="
+                    font-size: 1.1em; 
+                    line-height: 1.3em;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 3;
+                    -webkit-box-orient: vertical; 
+                    overflow: hidden;
+                    height: 3.9em;
+                ">{endereco}</strong>
                 <hr style="margin: 5px 0;">
                 <p style="margin: 0; font-size: 0.9em; height: 50px; overflow: hidden;">
                     {descricao_curta}

@@ -1,11 +1,19 @@
 import services.database as db
 
 def Adicionar(regional):
-    db.cursor.execute("""
-    INSERT INTO Regional(idCentral, idServico, cidade, nome, status)
-    VALUES (?,?,?,?,1)""",
-    regional.central, regional.servico, regional.cidade, regional.nome).rowcount
-    db.cnxn.commit()
+    try:
+        db.cursor.execute("""
+        INSERT INTO Regional(idCentral, idServico, cidade, nome, status)
+        VALUES (?,?,?,?,1)""",
+        regional.central, regional.servico, regional.cidade, regional.nome).rowcount
+
+        db.cnxn.commit()
+        return True
+    
+    except Exception as e:
+        print(f"Erro ao adicionar Regional: {e}")
+        db.cnxn.rollback()
+        return False
 
 def Inativar(idRegional):
     try:
