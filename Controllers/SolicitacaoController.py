@@ -9,9 +9,9 @@ def InserirSolicitacao(id_usuario: int, dados_ia: Dict[str, Any]) -> int | None:
 
     try:
         sql_solicitacao = """
-            INSERT INTO Solicitacao(idUsuario, endereco_consolidado, descricao_consolidada, gravidade)
+            INSERT INTO Solicitacao(idUsuario, idStatus, endereco_consolidado, descricao_consolidada, gravidade)
             OUTPUT INSERTED.idSolicitacao
-            VALUES (?, ?, ?, ?)
+            VALUES (?, 1, ?, ?, ?)
         """
 
         db.cursor.execute(
@@ -44,25 +44,3 @@ def InserirSolicitacao(id_usuario: int, dados_ia: Dict[str, Any]) -> int | None:
         print(f"Erro ao inserir Solicitação e Relações de Serviço: {e}")
         db.cnxn.rollback()
         return None
-    
-def SelecionarSolicitacoesAbertas():
-    sql_query = """
-        SELECT
-            s.idSolicitacao,
-            s.endereco_consolidado,
-            s.descricao_consolidada,
-            s.gravidade,
-            s.data_abertura,
-            u.nome AS nome_usuario,
-            u.telefone,
-            STRING_AGG(ser.nome, ', ') AS servicos_requeridos
-        FROM Solicitacao s
-        JOIN Usuario u ON s.idUsuario = u.idUsuario
-        LEFT JOIN Relacao_Solicitacao_Servico rss ON s.idSolicitacao = rss.idSolicitacao
-        LEFT JOIN Servico ser ON rss.idServico = ser.idServico
-        WHERE s.status_solicitacao = 'Aberta'
-        GROUP BY s.idSolicitacao, s.endereco_consolidado, s.descricao_consolidada, s.gravidade, s.data_abertura, u.nome, u.telefone
-        ORDER BY s.data_abertura DESC
-    """
-    db.cursor.execute(sql_query)
-    return db.cursor.fetchall()

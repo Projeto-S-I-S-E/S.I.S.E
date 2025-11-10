@@ -3,6 +3,7 @@ import Controllers.DashboardAdmController as DashboardAdmController
 import Controllers.DashboardCentralController as DashboardCentralController
 import Controllers.DashboardPlantonistaController as DashboardPlantonistaController
 from utils.utils import Sair, navegar_para
+from pages.DashboardPlantonistaView import renderizar_dashboard_plantonista
 
 def dashboard_por_cargo(cargo_id, nome_usuario):
     
@@ -180,20 +181,4 @@ def dashboard_por_cargo(cargo_id, nome_usuario):
 
     elif cargo_id == 3:
 
-        solicitacoes = DashboardPlantonistaController.ObterSolicitacoes()
-
-        st.markdown('<div style="padding-top: 20%; padding-left: 11.5%;">', unsafe_allow_html=True)
-
-        cols_sol = st.columns(3)
-
-        for i in range(6):
-            with cols_sol[i % 3]:
-                st.markdown(f"""
-                <div style="background-color: #D9D9D9; padding: 15px; border-radius: 5px; margin-bottom: 10px;">
-                    <strong>Grave</strong><br>
-                    Rua Pará, {i+1}<br>
-                    Incêndio em fábrica...
-                </div>
-                """, unsafe_allow_html=True)
-                
-        st.markdown('</div>', unsafe_allow_html=True)
+        renderizar_dashboard_plantonista()
