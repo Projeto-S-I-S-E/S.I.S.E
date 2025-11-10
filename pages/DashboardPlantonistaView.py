@@ -14,6 +14,11 @@ def renderizar_dashboard_plantonista():
         .stColumn div[data-testid="stVerticalBlockBorderWrapper"] > div > div[data-testid="stVerticalBlockBorderWrapper"]{
             background-color: #F0F0F0 !important;
         }
+                
+        .stButton button{
+            background-color: #446A8A;
+            color: white;
+        }
     </style>
     """, unsafe_allow_html=True)
 
@@ -100,8 +105,17 @@ def renderizar_solicitacoes_cards(solicitacoes):
                     height: 3.9em;
                 ">{endereco}</strong>
                 <hr style="margin: 5px 0;">
-                <p style="margin: 0; font-size: 0.9em; height: 50px; overflow: hidden;">
-                    {descricao_curta}
+                <p style="
+                    margin: 0; 
+                    font-size: 0.9em;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical; 
+                    overflow: hidden;
+                    line-height: 1.3em;
+                    height: 2.6em;
+                ">
+                    {descricao_completa}
                 </p>
                 """, unsafe_allow_html=True)
                 
