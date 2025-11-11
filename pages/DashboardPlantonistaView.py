@@ -8,7 +8,7 @@ def renderizar_dashboard_plantonista():
     <style>
         .stMain div[data-testid="stMainBlockContainer"]{
             margin-left: 200px;
-            max-width: 1520px;        
+            max-width: 1220px;        
         }
                 
         .stColumn div[data-testid="stVerticalBlockBorderWrapper"] > div > div[data-testid="stVerticalBlockBorderWrapper"]{
@@ -51,7 +51,7 @@ def renderizar_solicitacoes_cards(solicitacoes):
         st.markdown('</div>', unsafe_allow_html=True)
         return
 
-    cols = st.columns(5)
+    cols = st.columns(4)
 
     def mudar_estado(id_solicitacao, novo_status):
         if DashboardPlantonistaController.AtualizarStatusSolicitacao(id_solicitacao, novo_status):
@@ -70,7 +70,7 @@ def renderizar_solicitacoes_cards(solicitacoes):
         status_cor_hex = STATUS_COLOR_MAP.get(status_atual, '#666666')
         status_label = status_atual.upper()
         
-        col = cols[i % 5]
+        col = cols[i % 4]
 
         with col:
             with st.container(border=True): 
@@ -133,7 +133,7 @@ def renderizar_solicitacoes_cards(solicitacoes):
                 """, unsafe_allow_html=True)
             
             if status_atual == 'Aguardando':
-                botao_label = "Assumir (Em Andamento)"
+                botao_label = "Assumir"
                 novo_status = 2
                 botao_key = f"btn_ass_{id_solicitacao}"
             elif status_atual == 'Em Andamento':

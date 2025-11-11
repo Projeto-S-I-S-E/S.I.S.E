@@ -49,15 +49,33 @@ def processar_solicitacao_ia(endereco_completo: str, descricao_usuario: str) -> 
 
     1. Consolide o endereço em um formato mais curto e direto.
 
-    2. Classifique a gravidade da situação de acordo com o risco imediato à vida, usando APENAS uma das opções: 'Baixa', 'Média', 'Alta' ou 'Crítica'.
-    - **Baixa:** situações sem risco de morte ou ferimentos graves, como pequenos mal-estares, desmaios leves, quedas sem lesão, incêndios controlados, barulhos, brigas verbais ou pedidos de ajuda preventiva.
+    2. Classifique a gravidade da situação de acordo com o risco imediato à vida, usando APENAS UMA das opções: 'Baixa', 'Média', 'Alta' ou 'Crítica'.
+    - **Baixa:** situações sem risco de morte ou ferimentos graves, como pequenos mal-estares seguidos de alguma melhora, desmaios leves, quedas sem lesão, incêndios controlados, barulhos, brigas verbais ou pedidos de ajuda preventiva.
     - **Média:** situações que podem se agravar, mas sem risco iminente de morte, como pessoa consciente com dor forte, princípio de incêndio, acidente leve com ferimentos moderados, ou mal-estar persistente.
     - **Alta:** risco evidente de morte se não houver atendimento rápido, como pessoa inconsciente, sangramento intenso, incêndio ativo, afogamento ou agressão física grave.
     - **Crítica:** risco imediato de morte ou grande número de vítimas, como parada cardiorrespiratória, desabamento, incêndio em grande proporção, múltiplos feridos, explosão ou tiroteio ativo.
+    Importante: se a pessoa está consciente, falando normalmente e o ferimento é superficial (como corte pequeno, torção leve ou sangramento controlado), classifique como Baixa — mesmo que haja dor ou dificuldade de locomoção.
+    Só classifique como Média se houver possibilidade clara de agravamento, como: desmaio, dor intensa que não melhora, sangramento persistente, queimadura com bolhas, suspeita de fratura, princípio de incêndio ou ambiente com risco.
+    Dificuldade para andar ou dor localizada leve sem perda de consciência não caracteriza Média, e sim Baixa.
+    
+    3. Aqui estão alguns exemplos para detalhar como melhor avaliar as gravidades das ocorrências:
+    - **Baixa:** 'Um grupo de adolescentes tá fazendo muito barulho na praça, gritando e jogando garrafas no chão. Não há briga, apenas incômodo aos moradores.'; 'Um senhor tropeçou e caiu na calçada, sofreu escoriações leves, mas está consciente e falando normalmente.'; 'Um gato está preso no telhado da casa da vizinha, mia há horas e ninguém consegue alcançá-lo.'
+    - **Média:** 'Um carro suspeito está estacionado há muito tempo com dois homens observando as casas, deixando vizinhos assustados.'; 'Uma mulher desmaiou no mercado, recobrou a consciência mas permanece pálida e tonta.'; 'Um carro bateu em um poste e começou a soltar fumaça. O motorista saiu ileso, mas há cheiro de queimado e faíscas.'
+    - **Alta:** 'Um homem caiu de uma escada de três metros e sente muita dor nas costas, com dormência nas pernas.'; 'Um homem armado assaltou uma moça no ponto de ônibus, empurrou-a no chão e fugiu. Ela apresenta ferimentos leves.'; 'Um incêndio começou na cozinha de um restaurante, com fumaça forte e fogo subindo nos armários.'
+    - **Crítica:** 'Um homem armado mantém reféns dentro de uma loja, ameaçando atirar se alguém se aproximar.'; 'Um prédio está em chamas, com pessoas gritando por socorro e fumaça intensa.'; 'Um rapaz foi atropelado e está inconsciente no chão, com sangramento abundante.'
 
-    3. Determine os serviços de emergência primários e secundários necessários. Use APENAS: 'Bombeiro', 'SAMU' ou 'Polícia'.
+    4. Determine os serviços de emergência primários e secundários necessários. Use APENAS: 'Bombeiro', 'SAMU' ou 'Polícia'.
 
-    4. Reescreva a descrição do usuário em um texto consolidado, objetivo e profissional para o despacho de equipes.
+    5. Reescreva a descrição do usuário em um texto consolidado, objetivo e profissional para o despacho das equipes de emergência.
+
+    6. Calcule a porcentagem inicial de risco de morte:
+    Estime a probabilidade inicial de perda de vida (0% a 100%), considerando condições descritas, tempo de resposta provável e risco de agravamento.
+    Use como referência para calibrar melhor a definição de gravidade:
+    Gravidade	Intervalo de Risco (%)	Descrição
+    Baixa	    0% - 10%	            Situações estáveis, ferimentos leves, sangramento superficial, dor leve, queda simples, pessoa consciente e conversando.
+    Média	    10% - 40%	            Há dor forte, sangramento contínuo, princípio de incêndio ou possibilidade real de piora se o socorro demorar.
+    Alta	    40% - 75%	            Risco evidente de morte em minutos, sem atendimento rápido.
+    Crítica	    75% - 100%	            Risco imediato de morte ou múltiplas vítimas.
 
     Você DEVE retornar sua resposta EXCLUSIVAMENTE como um objeto JSON que obedeça ao seguinte schema: {json.dumps(json_esperado)}.
     """
