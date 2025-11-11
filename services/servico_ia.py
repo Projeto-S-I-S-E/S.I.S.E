@@ -57,7 +57,16 @@ def processar_solicitacao_ia(endereco_completo: str, descricao_usuario: str) -> 
     Importante: se a pessoa está consciente, falando normalmente e o ferimento é superficial (como corte pequeno, torção leve ou sangramento controlado), classifique como Baixa — mesmo que haja dor ou dificuldade de locomoção.
     Só classifique como Média se houver possibilidade clara de agravamento, como: desmaio, dor intensa que não melhora, sangramento persistente, queimadura com bolhas, suspeita de fratura, princípio de incêndio ou ambiente com risco.
     Dificuldade para andar ou dor localizada leve sem perda de consciência não caracteriza Média, e sim Baixa.
-    
+    Regras obrigatórias:
+
+    Nunca deixe a lista vazia — SEMPRE retorne pelo menos um serviço.  
+    Os serviços devem condizer com o tipo da ocorrência (ex.: SAMU para feridos, Polícia para conflitos, Bombeiro para fogo/fumaça).  
+
+    **Regra especial para Gravidade Baixa:**  
+    - Retorne o(s) serviço(s) corretos para orientação.  
+    - A descrição consolidada deve incluir claramente:  
+    → “Serviço indicado apenas para ORIENTAÇÃO, sem necessidade de envio imediato de equipes.”
+
     3. Aqui estão alguns exemplos para detalhar como melhor avaliar as gravidades das ocorrências:
     - **Baixa:** 'Um grupo de adolescentes tá fazendo muito barulho na praça, gritando e jogando garrafas no chão. Não há briga, apenas incômodo aos moradores.'; 'Um senhor tropeçou e caiu na calçada, sofreu escoriações leves, mas está consciente e falando normalmente.'; 'Um gato está preso no telhado da casa da vizinha, mia há horas e ninguém consegue alcançá-lo.'
     - **Média:** 'Um carro suspeito está estacionado há muito tempo com dois homens observando as casas, deixando vizinhos assustados.'; 'Uma mulher desmaiou no mercado, recobrou a consciência mas permanece pálida e tonta.'; 'Um carro bateu em um poste e começou a soltar fumaça. O motorista saiu ileso, mas há cheiro de queimado e faíscas.'
@@ -66,7 +75,11 @@ def processar_solicitacao_ia(endereco_completo: str, descricao_usuario: str) -> 
 
     4. Determine os serviços de emergência primários e secundários necessários. Use APENAS: 'Bombeiro', 'SAMU' ou 'Polícia'.
 
-    5. Reescreva a descrição do usuário em um texto consolidado, objetivo e profissional para o despacho das equipes de emergência.
+    5. Reescreva a descrição do usuário de forma:
+    - Profissional  
+    - Clara e objetiva  
+    - Focada no que importa para o despacho  
+    - Incluindo, quando for gravidade baixa, que o serviço é apenas orientativo
 
     6. Calcule a porcentagem inicial de risco de morte:
     Estime a probabilidade inicial de perda de vida (0% a 100%), considerando condições descritas, tempo de resposta provável e risco de agravamento.

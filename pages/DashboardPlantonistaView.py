@@ -20,6 +20,10 @@ def renderizar_dashboard_plantonista():
             background-color: #446A8A;
             color: white;
         }
+                
+        .stPopover > div> button{
+            width: 100%;        
+        }
     </style>
     """, unsafe_allow_html=True)
 
@@ -64,6 +68,8 @@ def renderizar_solicitacoes_cards(solicitacoes):
         endereco = sol[1]
         descricao_completa = sol[2]
         gravidade = sol[3]
+        nome_usuario = sol[5]
+        telefone = sol[6]
         status_atual = sol[7]
         
         gravidade_cor_hex = STATUS_COLOR_MAP.get(gravidade, '#AAAAAA')
@@ -131,6 +137,33 @@ def renderizar_solicitacoes_cards(solicitacoes):
                     {status_label}
                 </div>
                 """, unsafe_allow_html=True)
+            
+            with st.popover("Ver Detalhes"):
+                st.subheader("Detalhes da Solicitação")
+                
+                st.markdown(f"**Nome:** {nome_usuario}")
+                st.markdown(f"**Telefone:** {telefone}")
+                st.markdown(f"**Endereço:** {endereco}")
+                st.markdown(f"**Gravidade:** **{gravidade}**")
+                st.markdown(f"**Status Atual:** *{status_atual}*")
+                st.divider()
+                st.markdown("**Descrição Completa:**")
+                st.info(descricao_completa)
+                
+                if status_atual == 'Aguardando':
+                    novo_status_popover = 2
+                    st.button("Assumir", 
+                              key=f"pop_ass_{id_solicitacao}",
+                              on_click=mudar_estado, 
+                              args=(id_solicitacao, novo_status_popover),
+                              use_container_width=True)
+                elif status_atual == 'Em Andamento':
+                    novo_status_popover = 3
+                    st.button("Finalizar Solicitação", 
+                              key=f"pop_fin_{id_solicitacao}",
+                              on_click=mudar_estado, 
+                              args=(id_solicitacao, novo_status_popover),
+                              use_container_width=True)
             
             if status_atual == 'Aguardando':
                 botao_label = "Assumir"
