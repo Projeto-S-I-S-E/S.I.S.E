@@ -47,7 +47,7 @@ def processar_solicitacao_ia(endereco_completo: str, descricao_usuario: str) -> 
     contexto_sistema = f"""
     Você é um Analista de Emergências sênior. Sua tarefa é analisar o ENDEREÇO COMPLETO e a DESCRIÇÃO DO USUÁRIO.
 
-    1. Consolide o endereço em um formato mais curto e direto.
+    1. Consolide o endereço em um formato mais curto e direto, não coloque o País, porém mantenha o CEP, se houver informações a nível de construção mantenha elas.
 
     2. Classifique a gravidade da situação de acordo com o risco imediato à vida, usando APENAS UMA das opções: 'Baixa', 'Média', 'Alta' ou 'Crítica'.
     - **Baixa:** situações sem risco de morte ou ferimentos graves, como pequenos mal-estares seguidos de alguma melhora, desmaios leves, quedas sem lesão, incêndios controlados, barulhos, brigas verbais ou pedidos de ajuda preventiva.

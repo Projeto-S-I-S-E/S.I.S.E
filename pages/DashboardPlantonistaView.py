@@ -24,10 +24,24 @@ def renderizar_dashboard_plantonista():
         .stPopover > div > button{
             width: 100%;        
         }
+                
+        .st-key-botaoAtualizar div[data-testid="stButton"] button{
+            background-color: #446A8A;
+            color: white;
+        }
     </style>
     """, unsafe_allow_html=True)
 
     id_usuario_logado = st.session_state['usuario_id']
+    
+    col_espaco, col_atualizar, col_espaco1 = st.columns([3, 1, 3])
+    
+    with col_atualizar:
+        st.button(
+            "Atualizar",
+            key="btn_atualizar_dashboard",
+            use_container_width=True
+        )
 
     try:
         solicitacoes = DashboardPlantonistaController.ObterSolicitacoes(id_usuario_logado)
