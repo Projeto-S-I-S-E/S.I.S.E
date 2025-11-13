@@ -21,7 +21,7 @@ def renderizar_dashboard_plantonista():
             color: white;
         }
                 
-        .stPopover > div> button{
+        .stPopover > div > button{
             width: 100%;        
         }
     </style>
@@ -148,7 +148,7 @@ def renderizar_solicitacoes_cards(solicitacoes):
                 st.markdown(f"**Status Atual:** *{status_atual}*")
                 st.divider()
                 st.markdown("**Descrição Completa:**")
-                st.info(descricao_completa)
+                st.markdown(descricao_completa)
                 
                 if status_atual == 'Aguardando':
                     novo_status_popover = 2
