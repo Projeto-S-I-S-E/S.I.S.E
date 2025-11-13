@@ -125,6 +125,24 @@ def dashboard_por_cargo(cargo_id, nome_usuario):
             margin-top: 20%;
             width: 83.5%;
         }
+                
+        .st-key-btn_reg div[data-testid="stButton"] button{
+            background-color: #D9D9D9;
+            color: black;
+            border-radius: 3px;        
+        }
+                
+        .st-key-btn_cen div[data-testid="stButton"] button{
+            background-color: #D9D9D9;
+            color: black;
+            border-radius: 3px;        
+        }
+                
+        .st-key-btn_pla div[data-testid="stButton"] button{
+            background-color: #D9D9D9;
+            color: black;
+            border-radius: 3px;        
+        }
     </style>
     """, unsafe_allow_html=True)
 
