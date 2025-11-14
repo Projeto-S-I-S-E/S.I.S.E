@@ -184,9 +184,23 @@ if st.session_state['logado']:
 
     cargo_id = st.session_state['usuario_cargo_id']
     nome_usuario = st.session_state['usuario_nome']
+    id_usuario = st.session_state['usuario_id']
 
     if st.session_state['pagina_atual'] in ["ADMIN_DASHBOARD", "CENTRAL_DASHBOARD", "PLANTONISTA_DASHBOARD"]:
         dashboard_por_cargo(cargo_id, nome_usuario)
+
+        if cargo_id == 3:
+            nome_servico = LoginController.ObterServicoDoPlantonista(id_usuario)
+            nome_usuario += f": {nome_servico}"
+        else:
+            st.markdown("""
+            <style>
+                #nome-perfil{
+                    margin-right: 45.3% !important;        
+                }
+            </style>
+            """, unsafe_allow_html=True)
+
         st.markdown('<div class="barra-perfil">', unsafe_allow_html=True)
         st.markdown(f'<p id="nome-perfil">Perfil {nome_usuario}</p>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)

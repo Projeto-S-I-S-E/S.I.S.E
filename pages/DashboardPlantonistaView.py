@@ -7,7 +7,7 @@ def renderizar_dashboard_plantonista():
     st.markdown("""
     <style>
         .stMain div[data-testid="stMainBlockContainer"]{
-            margin-left: 200px;
+            margin-left: 0;
             max-width: 1220px;        
         }
                 
@@ -22,6 +22,8 @@ def renderizar_dashboard_plantonista():
         }
                 
         .stPopover > div > button{
+            background-color: white;
+            color: black;
             width: 100%;        
         }
                 

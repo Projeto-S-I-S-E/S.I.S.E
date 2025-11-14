@@ -16,19 +16,8 @@ def renderizar_pagina():
         }
                 
         .stMain div[data-testid="stMainBlockContainer"]{
-            margin-left: 150px;
+            margin-left: 0;
             max-width: 836px;        
-        }
-                
-        .barra-lateral{
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 11%;
-            height: 95%;
-            background-color: #DBE8EC;
-            z-index: 1;
-            clip-path: rect(0px 100% 100% 0px);
         }
                 
         .barra-superior{
@@ -75,8 +64,8 @@ def renderizar_pagina():
             position: fixed;
             bottom: 0;
             left: 0;
-            margin-left: 11.5%;
-            width: 88%;
+            margin-left: 1%;
+            width: 98%;
             height: 7%;
             border: 1px solid #000000;
             border-radius: 35px 35px 0px 0px;
@@ -89,7 +78,7 @@ def renderizar_pagina():
             position: fixed;
             bottom: 0;
             right: 0;
-            margin-right: 38% !important;
+            margin-right: 43.5% !important;
             margin-bottom: 0.5%;
             color: #000000;
             font-size: 1.3em !important;
@@ -161,7 +150,6 @@ def renderizar_pagina():
     </style>
     """, unsafe_allow_html=True)
 
-    st.markdown('<div class="barra-lateral"></div>', unsafe_allow_html=True)
     st.markdown('<div class="barra-superior"></div>', unsafe_allow_html=True)
     
     if st.button("Sair", key="botaoSair", type="secondary"):

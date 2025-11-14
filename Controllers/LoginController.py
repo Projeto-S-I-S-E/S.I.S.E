@@ -24,3 +24,19 @@ def AutenticarUsuario(usuario, senha):
             return None, None
     else:
         return None, None
+    
+def ObterServicoDoPlantonista(id_usuario):
+    sql_query = """
+        SELECT 
+            s.nome 
+        FROM Plantonista p
+        JOIN Regional r ON p.idRegional = r.idRegional
+        JOIN Perfil perf ON p.nome = perf.nome
+        JOIN Servico s ON r.idServico = s.idServico
+        WHERE perf.idPerfil = ?
+    """
+
+    db.cursor.execute(sql_query, id_usuario)
+    resultado = db.cursor.fetchone()
+    
+    return resultado[0] if resultado else None
